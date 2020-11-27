@@ -1,0 +1,101 @@
+        // do this so we can remove its listener
+//        onDragDetect = event -> {
+//            if(!ProgramEventController.isMovable()) {
+//                Dragboard dragboard = node.startDragAndDrop(TransferMode.LINK); // this is vital to drag success.
+//
+//                ClipboardContent content = new ClipboardContent();
+//                content.putString(id); // parent node ID
+//
+//                dragboard.setContent(content);
+//               // event.consume();
+//                System.out.println("DRAG START");
+//            }
+//        };
+//        node.addEventFilter(MouseEvent.DRAG_DETECTED, onDragDetect);
+//
+//        onDragOver = event -> {
+//            if(!ProgramEventController.isMovable()) {
+//                Dragboard dragboard = event.getDragboard();
+//
+//                if (dragboard.hasString()) {
+//                    event.acceptTransferModes(TransferMode.LINK);
+//                }
+//
+//                System.out.println("DRAG OVER " + ProgramEventController.isMovable());
+//                System.out.println("X: " + event.getX() + "X: " + event.getSceneX() + "X: " +event.getScreenX());
+//                //event.consume();
+//            }
+//        };
+//        node.addEventFilter(DragEvent.DRAG_OVER, onDragOver);
+//
+//        onDragDropped = event -> {
+//            if(!ProgramEventController.isMovable()) {
+//                boolean dragCompleted = false;
+//
+//                Dragboard dragboard = event.getDragboard();
+//
+//                if(dragboard.hasString())
+//                {
+//                    /// do connection here
+//                    System.out.println(String.format("Parent: %s, Child: %s", dragboard.getString(), id));
+//
+////                    edgeTest.setStartX(CanvasController.findNode(dragboard.getString()).getNode().getLayoutX());
+////                    edgeTest.setStartY(CanvasController.findNode(dragboard.getString()).getNode().getLayoutY());
+////
+////                    edgeTest.setEndX(node.getLayoutX());
+////                    edgeTest.setEndY(node.getLayoutY());
+////
+////                    System.out.println("X: " + CanvasController.findNode(dragboard.getString()).getNode().getLayoutX()
+////                            + " Y: " + CanvasController.findNode(dragboard.getString()).getNode().getLayoutY());
+////                    System.out.println("X: " + edgeTest.getEndX() + " Y: " + edgeTest.getEndY());
+//                    System.out.println("X: " + event.getX() + " Y: " + event.getY() );
+//                    System.out.println("X: " + node.getLayoutX() + " Y: " + node.getLayoutY());
+//
+//                    dragCompleted = true;
+//                }
+//
+//                System.out.println("DRAG DROPPED " + ProgramEventController.isMovable());
+//                // Data transfer is not successful
+//                if(!dragCompleted) {
+//                    System.out.println("delete that edge, not complete");
+//                }
+//                else
+//                    System.out.println("Edge complete");
+//
+//                event.setDropCompleted(dragCompleted);
+//
+//
+//                //event.consume();
+//
+////                if(!dragCompleted) // fixme: This solves the problem of releasing shift while not dropping
+////                    ProgramEventController.move();
+//            }
+//        };
+//
+//        node.addEventFilter(DragEvent.DRAG_DROPPED, onDragDropped);
+//
+//        onDragDone = event -> {
+//          if(!ProgramEventController.isMovable()) {
+//              TransferMode tm = event.getTransferMode();
+//
+//              if (tm == TransferMode.LINK)
+//              {
+//                  System.out.println("LINKED");
+//                  System.out.println("DRAG DONE " + ProgramEventController.isMovable());
+//                  // probably call canvas add edge
+//              }
+//
+//              //ProgramEventController.move();
+//              //event.consume();
+//          }
+//        };
+//
+//        node.addEventFilter(DragEvent.DRAG_DONE, onDragDone);
+
+
+    private void removeListeners() {
+//        node.removeEventFilter(MouseEvent.DRAG_DETECTED, onDragDetect);
+//        node.removeEventFilter(DragEvent.DRAG_OVER, onDragOver);
+//        node.removeEventFilter(DragEvent.DRAG_DROPPED, onDragDropped);
+//        node.removeEventFilter(DragEvent.DRAG_DONE, onDragDone);
+    }
