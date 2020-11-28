@@ -14,7 +14,6 @@ import sketchpad.constants.ColorScheme;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
 import sketchpad.controller.ProgramEventController;
-import sketchpad.controller.canvas.CanvasData;
 import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.model.canvaselement.edge.Edges;
 
@@ -35,6 +34,7 @@ public class Vertex implements Node {
     private final StackPane node;
     private Line edgeGuide;
     private Edges edges;
+    private Paint currentFill;
 
     private final String SELECTION_STYLE = String.format("-fx-font-size: %d; " +
             "-fx-font-family: Calibri;" +
@@ -45,6 +45,7 @@ public class Vertex implements Node {
             "-fx-stroke-width: %d", EDGE_COLOR, EDGE_STROKE);
 
     public Vertex(double x, double y) {
+        currentFill = NODE;
         initShape();
         initLabel();
         value = 0;
@@ -87,7 +88,6 @@ public class Vertex implements Node {
                 double y = node.getLayoutY() + event.getY() - radius;
                 node.relocate(x, y);
                 resetEdgeGuide(event.getSceneX(), event.getSceneY());
-                // todo: need to adjust edges connected to this node.
                 CanvasController.adjustEdges(this);
             }
             else {
@@ -112,6 +112,35 @@ public class Vertex implements Node {
         };
 
         node.addEventHandler(MouseEvent.MOUSE_RELEASED, onMouseReleased);
+
+        EventHandler<KeyEvent> keyPressed = event -> {
+            switch (event.getCode()) {
+                case DIGIT1: currentFill = NODE;
+                    break;
+                case DIGIT2: currentFill = GREEN_NODE;
+                    break;
+                case DIGIT3: currentFill = GOLD_NODE;
+                    break;
+                case DIGIT4: currentFill = INVERTED_NODE;
+                    break;
+                case DIGIT5: currentFill = BLACK_NODE;
+                    break;
+                case DIGIT6: currentFill = ORANGE_NODE;
+                    break;
+                case DIGIT7: currentFill = BLUE_NODE;
+                    break;
+                case DIGIT8: currentFill = PURPLE_NODE;
+                    break;
+                case DIGIT9: currentFill = BROWN_NODE;
+                    break;
+                case DIGIT0: currentFill = LIGHT_NODE;
+                    break;
+                default: return;
+            }
+            deselect();
+        };
+
+        node.addEventHandler(KeyEvent.KEY_PRESSED, keyPressed);
     }
 
     private void resetEdgeGuide(double x, double y) {
@@ -155,20 +184,7 @@ public class Vertex implements Node {
     }
 
     public void deselect() {
-        shape.setFill(ColorScheme.Node.NODE);
-    }
-
-    public void showName() {
-        label.setText(order+"");
-        label.setVisible(true);
-    }
-
-    /*
-    * todo: switch from showing name to showing value
-    * */
-    public void showValue() {
-        label.setText(value+"");
-        label.setVisible(true);
+        shape.setFill(currentFill);
     }
 
     @Override
