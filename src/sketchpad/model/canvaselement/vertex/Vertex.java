@@ -14,6 +14,7 @@ import sketchpad.constants.ColorScheme;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
 import sketchpad.controller.ProgramEventController;
+import sketchpad.controller.canvas.CanvasData;
 import sketchpad.model.canvaselement.edge.Edges;
 
 import java.util.UUID;
@@ -74,24 +75,24 @@ public class Vertex implements Node {
                 new DeleteNode(this).execute();
             }
             else if(event.getButton().equals(MouseButton.PRIMARY)) {
-                CanvasController.identifyNode(this);
+                CanvasController.select(this);
             }
         };
         node.addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
 
         node.setOnMouseDragged(event -> {
-            if(ProgramEventController.isMovable()) {
+            if(ProgramEventController.isMovable()) { // || or some other macro like ctrl would make directed edges.
                 double x = node.getLayoutX() + event.getX() - radius;
                 double y = node.getLayoutY() + event.getY() - radius;
                 node.relocate(x, y);
                 resetEdgeGuide(event.getSceneX(), event.getSceneY());
                 // todo: need to adjust edges connected to this node.
+                CanvasController.adjustEdges(this);
             }
             else {
                 // set line end x,y
                 edgeGuide.setEndX(event.getSceneX());
                 edgeGuide.setEndY(event.getSceneY());
-                CanvasController.setStartNode(this);
             }
             node.toFront();
         });
@@ -133,6 +134,21 @@ public class Vertex implements Node {
         return id;
     }
 
+    @Override
+    public javafx.scene.Node getCanvasElement() {
+        return node;
+    }
+
+    @Override
+    public void highlight(Paint paintStyle) {
+        shape.setFill(paintStyle);
+    }
+
+    @Override
+    public String getName() {
+        return order+"";
+    }
+
     public void select() {
         shape.setFill(ColorScheme.Node.SELECTED);
     }
@@ -154,10 +170,6 @@ public class Vertex implements Node {
         label.setVisible(true);
     }
 
-    public void color(Paint paintStyle) {
-        shape.setFill(paintStyle);
-    }
-
     @Override
     public int getValue() {
         return value;
@@ -174,5 +186,10 @@ public class Vertex implements Node {
     @Override
     public Edges getEdges() {
         return edges;
+    }
+
+    @Override
+    public void setValue(int newValue) {
+        value = newValue;
     }
 }

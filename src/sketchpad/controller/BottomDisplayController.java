@@ -14,7 +14,6 @@ public class BottomDisplayController {
     public static void init(BottomDisplay display) {
         if(instance == null)
             instance = new BottomDisplayController(display);
-
     }
 
     public static void setNodes(int numNodes) {
@@ -27,8 +26,9 @@ public class BottomDisplayController {
         display.setEdges(numEdges);
     }
 
-    public static void showSelection(int order) {
-        display.showSelection(order);
+    // refactored to accept string instead
+    public static void showSelection(String label, int value) {
+        display.showSelection(label, value);
     }
 
     public static void hideSelection() {

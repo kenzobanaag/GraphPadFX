@@ -18,6 +18,9 @@ import java.util.UUID;
 import static sketchpad.constants.ColorScheme.Edge.EDGE;
 import static sketchpad.constants.ColorScheme.Edge.SELECTED;
 
+/*
+* For loop edges, we can maybe create UndirectedLoop and DirectedLoop
+* */
 
 public abstract class Edge implements Element {
 
@@ -73,10 +76,10 @@ public abstract class Edge implements Element {
     private void initListeners() {
         EventHandler<MouseEvent> clickHandler = event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)) {
-                CanvasController.select(this);
+               CanvasController.select(this);
             }
             else if(event.getButton().equals(MouseButton.SECONDARY)) { // right click
-                System.out.println("Remove this edge");
+                CanvasController.removeEdge(this);
             }
         };
 
@@ -87,11 +90,15 @@ public abstract class Edge implements Element {
         edgeName = String.format("n%d-n%d", parentOrder, childOrder);
     }
 
+    public void setValue(int newValue) {
+        value = newValue;
+    }
+
     public int getValue() {
         return value;
     }
 
-    public String getEdgeName() {
+    public String getName() {
         return edgeName;
     }
 
@@ -106,7 +113,6 @@ public abstract class Edge implements Element {
     public String getId() {
         return id;
     }
-
     /*
     * Color edge and all thats connected to it?
     * */
@@ -117,6 +123,8 @@ public abstract class Edge implements Element {
     public void deselect() {
         edge.setStroke(EDGE);
     }
+
+    public abstract void adjustEdge(double x, double y, String nodeId);
 
     public abstract EdgeTypes getType();
     public abstract javafx.scene.Node getCanvasElement();

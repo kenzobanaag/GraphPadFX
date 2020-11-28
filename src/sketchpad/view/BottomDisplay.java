@@ -1,13 +1,13 @@
 package sketchpad.view;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import sketchpad.constants.ColorScheme;
 import sketchpad.constants.Sizes;
-
-import java.awt.*;
+import sketchpad.controller.canvas.CanvasController;
+import sketchpad.utils.InputValidator;
+import sketchpad.utils.TryParse;
 
 import static sketchpad.constants.ColorScheme.Display.BACKGROUND_STR;
 import static sketchpad.constants.ColorScheme.Display;
@@ -18,8 +18,10 @@ public class BottomDisplay extends LayoutContainer{
 
     private final Label edgesInputLabel;
     private final Label nodesInputLabel;
-    private final Label nodeOrderLabel;
-    private final Label nodeTitleLabel;
+    private final Label selectionNameLabel;
+    private final Label selectionTitleLabel;
+    private final Label valueTitleLabel;
+    private final TextField valueInputField;
     private final String TITLE_STYLE = String.format("-fx-font-size: %d; " +
             "-fx-font-family: Calibri;" +
             "-fx-font-weight: Bold;" +
@@ -52,13 +54,30 @@ public class BottomDisplay extends LayoutContainer{
         nodesInputLabel = new Label("0");
         nodesInputLabel.setStyle(INPUT_STYLE);
 
-        nodeTitleLabel = new Label("Selection: ");
-        nodeTitleLabel.setStyle(TITLE_STYLE);
-        nodeTitleLabel.setVisible(false);
-        nodeOrderLabel = new Label();
-        nodeOrderLabel.setStyle(SELECTION_STYLE);
+        selectionTitleLabel = new Label("Selection: ");
+        selectionTitleLabel.setStyle(TITLE_STYLE);
+        selectionTitleLabel.setVisible(false);
+        selectionNameLabel = new Label();
+        selectionNameLabel.setStyle(SELECTION_STYLE);
 
-        layout.getChildren().addAll(edgesTitleLabel, edgesInputLabel, nodesTitleLabel, nodesInputLabel, nodeTitleLabel, nodeOrderLabel);
+        valueTitleLabel = new Label("Value: ");
+        valueTitleLabel.setStyle(TITLE_STYLE);
+        valueTitleLabel.setVisible(false);
+        valueInputField = new TextField();
+        valueInputField.setPrefSize(35,35);
+        valueInputField.setVisible(false);
+
+        setValueChangedListener();
+
+        layout.getChildren().addAll(edgesTitleLabel, edgesInputLabel, nodesTitleLabel, nodesInputLabel,
+                selectionTitleLabel, selectionNameLabel, valueTitleLabel,valueInputField);
+    }
+
+    private void setValueChangedListener() {
+        valueInputField.textProperty().addListener((observable, oldVal, newVal) -> {
+            // fixme: not dependable or good design
+            CanvasController.changeElementValue(TryParse.tryParseInt(newVal));
+        });
     }
 
     public void setEdges(int numEdges) {
@@ -69,15 +88,20 @@ public class BottomDisplay extends LayoutContainer{
         nodesInputLabel.setText(String.valueOf(numNodes));
     }
 
-    public void showSelection(int numNodes) {
-        nodeOrderLabel.setVisible(true);
-        nodeTitleLabel.setVisible(true);
-        nodeOrderLabel.setText(numNodes+"");
+    public void showSelection(String selectionName, int value) {
+        selectionNameLabel.setVisible(true);
+        selectionTitleLabel.setVisible(true);
+        valueInputField.setVisible(true);
+        valueTitleLabel.setVisible(true);
+        selectionNameLabel.setText(selectionName);
+        valueInputField.setText(value+"");
     }
 
     public void hideSelection() {
-        nodeOrderLabel.setVisible(false);
-        nodeTitleLabel.setVisible(false);
+        selectionNameLabel.setVisible(false);
+        selectionTitleLabel.setVisible(false);
+        valueInputField.setVisible(false);
+        valueTitleLabel.setVisible(false);
     }
 
     @Override

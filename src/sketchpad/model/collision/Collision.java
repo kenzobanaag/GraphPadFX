@@ -17,7 +17,7 @@ public class Collision {
         hitLine = new Rectangle(Sizes.Edge.EDGE_STROKE*2, Sizes.Edge.EDGE_STROKE*2);
     }
 
-    public boolean isClear(LinkedHashMap<String, Node> nodes, double x, double y) {
+    public boolean nodeClear(LinkedHashMap<String, Node> nodes, double x, double y) {
         hitBox.setX(x - Sizes.Node.RADIUS);
         hitBox.setY(y - Sizes.Node.RADIUS);
 
@@ -33,7 +33,7 @@ public class Collision {
         hitBox.setY(y - Sizes.Edge.EDGE_STROKE);
 
         for (Edge edge : edges.values()) {
-            if(hitBox.intersects(edge.getCanvasElement().getBoundsInParent())) // todo: Refactor to intersect rectangle instead of bounds. This might be a better approach since we dont really know whats happening with bounds
+            if(hitBox.intersects(edge.getCanvasElement().getBoundsInParent())) // Refactor to intersect rectangle instead of bounds. This might be a better approach since we dont really know whats happening with bounds
                 return false;
         }
         return true;

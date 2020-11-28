@@ -22,6 +22,7 @@ public final class ColorScheme {
         public static final String NODE_STR3 = "#0384da";
         public static final String NODE_STR5 = "#DA0318";
         public static final String GOLD_STR = "#FFBA00";
+        // todo: Create 9 different colors of nodes. 1 is NODE_STR
         public static final String SELECTED_STR = NODE_STR5;
         public static final String NODE_TEXT_STR = "#1C1A18";
         public static final Color NODE = Color.valueOf(NODE_STR);
