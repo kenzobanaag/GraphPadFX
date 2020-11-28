@@ -130,6 +130,6 @@ public abstract class Edge implements Element {
     public abstract javafx.scene.Node getCanvasElement();
 
     public enum EdgeTypes {
-        DIRECTED, UNDIRECTED;
+        DIRECTED, UNDIRECTED, DIRECTED_LOOP, UNDIRECTED_LOOP;
     }
 }

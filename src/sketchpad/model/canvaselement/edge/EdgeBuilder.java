@@ -10,6 +10,7 @@ public abstract class EdgeBuilder {
         if(parent.getId().equals(child.getId())) {
             // loop
             // if ProgramEventController.shift is pressed, undirected, else directed
+            return new UndirectedLoop(parent, child);
         }
         else {
             // line

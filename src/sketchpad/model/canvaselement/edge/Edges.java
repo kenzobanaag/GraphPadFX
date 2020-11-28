@@ -54,9 +54,9 @@ public class Edges {
 
     public List<String> edgeListClone() {
         LinkedList<String> deepCloneArray = new LinkedList<>();
-        for(String edgeId : edgeList) {
-            deepCloneArray.add(edgeId);
-        }
+        for(String edgeId : edgeList)
+            if(!deepCloneArray.contains(edgeId))
+                deepCloneArray.add(edgeId);
 
         return deepCloneArray;
     }
