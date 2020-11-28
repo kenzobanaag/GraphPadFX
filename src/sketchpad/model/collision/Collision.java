@@ -22,7 +22,7 @@ public class Collision {
         hitBox.setY(y - Sizes.Node.RADIUS);
 
         for (Node node : nodes.values()) {
-            if(hitBox.intersects(node.getNode().getBoundsInParent()))
+            if(hitBox.intersects(node.getCanvasElement().getBoundsInParent()))
                 return false;
         }
         return true;
@@ -44,7 +44,7 @@ public class Collision {
         hitBox.setY(y - Sizes.Node.RADIUS);
 
         for (Node node : nodes.values()) {
-            if(hitBox.intersects(node.getNode().getBoundsInParent()))
+            if(hitBox.intersects(node.getCanvasElement().getBoundsInParent()))
                 return node;
         }
         return null;

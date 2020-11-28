@@ -92,7 +92,7 @@ public class CanvasController {
     public static void addNode(Node node) {
         // todo: Should also handle collisions. We know that these are console adds so we need to find a place for new nodes
         data.addNode(node);
-        canvas.getLayout().getChildren().addAll(node.getEdgeGuide(), node.getNode()); // add to canvas
+        canvas.getLayout().getChildren().addAll(node.getEdgeGuide(), node.getCanvasElement()); // add to canvas
         BottomDisplayController.setNodes(data.getNodeCount());
         toggleName();
         focus();
@@ -101,7 +101,7 @@ public class CanvasController {
     public static void removeNode(Node node) {
         data.removeNode(node);
         deselect(node);
-        canvas.getLayout().getChildren().removeAll(node.getEdgeGuide(), node.getNode());
+        canvas.getLayout().getChildren().removeAll(node.getEdgeGuide(), node.getCanvasElement());
         BottomDisplayController.setNodes(data.getNodeCount());
         toggleName();
         focus();
@@ -136,9 +136,9 @@ public class CanvasController {
     * */
     private static void repaintNodes() {
         for(Node node : data.getNodeMap().values())
-            canvas.getLayout().getChildren().remove(node.getNode());
+            canvas.getLayout().getChildren().remove(node.getCanvasElement());
         for(Node node :data.getNodeMap().values())
-            canvas.getLayout().getChildren().add(node.getNode());
+            canvas.getLayout().getChildren().add(node.getCanvasElement());
     }
 
     public static void addEdge(String nodeId, Edge edge) {
@@ -213,7 +213,7 @@ public class CanvasController {
     public static void clearSketchPad() {
         for(Node node : data.getNodeMap().values()) {
             // note: dont call removeNode because there will be concurrency issues. Modifying a list while accessing it
-            canvas.getLayout().getChildren().removeAll(node.getEdgeGuide(), node.getNode());
+            canvas.getLayout().getChildren().removeAll(node.getEdgeGuide(), node.getCanvasElement());
         }
 
         for(Edge edge : data.getEdgeMap().values()) {

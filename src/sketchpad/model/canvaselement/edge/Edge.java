@@ -53,8 +53,8 @@ public abstract class Edge implements Element {
         setEdgeName(parent.getOrder(), child.getOrder());
         id = UUID.randomUUID().toString();
         if(!TestingSpecifics.isTesting()) // HAHAHAHAHAHAHAHA
-            initWidgets(parent.getNode().getLayoutX(), parent.getNode().getLayoutY(),
-                    child.getNode().getLayoutX(), child.getNode().getLayoutY()); // note: comment out when testing
+            initWidgets(parent.getCanvasElement().getLayoutX(), parent.getCanvasElement().getLayoutY(),
+                    child.getCanvasElement().getLayoutX(), child.getCanvasElement().getLayoutY()); // note: comment out when testing
         initListeners();
     }
 

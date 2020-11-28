@@ -20,16 +20,17 @@ public class UndirectedLoop extends Edge{
     * todo: remove line from edges object
     * */
     private Arc loop;
+    private final int RADIUS = Sizes.Node.RADIUS;
 
     public UndirectedLoop(sketchpad.model.canvaselement.vertex.Node parent, sketchpad.model.canvaselement.vertex.Node child) {
         super(parent, child, 0);
-        initArc(parent.getCanvasElement().getLayoutX()+25, parent.getCanvasElement().getLayoutY()+25);
+        initArc(parent.getCanvasElement().getLayoutX() + RADIUS, parent.getCanvasElement().getLayoutY() + RADIUS);
         initListeners();
     }
 
     public UndirectedLoop(sketchpad.model.canvaselement.vertex.Node parent, sketchpad.model.canvaselement.vertex.Node child, int value) {
         super(parent, child, value);
-        initArc(parent.getCanvasElement().getLayoutX()+25, parent.getCanvasElement().getLayoutY()+25); // 25 is the node raidius
+        initArc(parent.getCanvasElement().getLayoutX() + RADIUS, parent.getCanvasElement().getLayoutY() + RADIUS); // 25 is the node raidius
         initListeners();
     }
 

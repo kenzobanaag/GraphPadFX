@@ -9,7 +9,6 @@ import sketchpad.model.canvaselement.edge.Edges;
 
 
 public interface Node extends Element {
-    Pane getNode();
     int getOrder();
     String getId();
     void setOrder(int order);

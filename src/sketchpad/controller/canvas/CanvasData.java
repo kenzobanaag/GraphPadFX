@@ -1,5 +1,6 @@
 package sketchpad.controller.canvas;
 
+import sketchpad.constants.Sizes;
 import sketchpad.model.canvaselement.edge.Edge;
 import sketchpad.model.canvaselement.vertex.Node;
 import sketchpad.model.collision.Collision;
@@ -15,6 +16,7 @@ public class CanvasData {
     private LinkedHashMap<String, Node> nodeMap;
     private static CanvasData instance;
     private int order = 0;
+    private final int OFFSET = Sizes.Node.RADIUS;
 
 
     private CanvasData() {
@@ -68,9 +70,11 @@ public class CanvasData {
     * */
     protected void adjustEdge(Node node) {
         // is parent start xy? or end?
+
+        // check for parallel edges first?
         for(String edgeId : node.getEdges().getEdgeList()) {
-            edgeMap.get(edgeId).adjustEdge(node.getCanvasElement().getLayoutX()+25,
-                    node.getCanvasElement().getLayoutY()+25, node.getId());
+            edgeMap.get(edgeId).adjustEdge(node.getCanvasElement().getLayoutX() + OFFSET,
+                    node.getCanvasElement().getLayoutY() + OFFSET, node.getId());
         }
     }
 

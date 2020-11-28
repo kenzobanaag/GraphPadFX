@@ -68,7 +68,7 @@ public class Vertex implements Node {
 
     private void initShape() {
         radius = Sizes.Node.RADIUS;
-        shape = new Circle(radius, ColorScheme.Node.NODE);
+        shape = new Circle(radius, currentFill);
     }
 
     private void setListeners() {
@@ -148,10 +148,6 @@ public class Vertex implements Node {
         edgeGuide.setStartY(y);
         edgeGuide.setEndX(x);
         edgeGuide.setEndY(y);
-    }
-
-    public Pane getNode() {
-        return node;
     }
 
     public void setOrder(int num) {
