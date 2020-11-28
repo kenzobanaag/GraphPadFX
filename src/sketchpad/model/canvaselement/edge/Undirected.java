@@ -1,5 +1,6 @@
 package sketchpad.model.canvaselement.edge;
 
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import sketchpad.model.canvaselement.vertex.Node;
 
@@ -21,5 +22,23 @@ public class Undirected extends Edge{
     @Override
     public Line getCanvasElement() {
         return edge;
+    }
+
+    @Override
+    public void highlight(Paint paintStyle) {
+        edge.setStroke(paintStyle);
+    }
+
+    @Override
+    public void adjustEdge(double x, double y, String nodeId) {
+        if(parentId.equals(nodeId)) {
+            // either start or end
+            edge.setStartX(x);
+            edge.setStartY(y);
+        }
+        else if(childId.equals(nodeId)) {
+            edge.setEndX(x);
+            edge.setEndY(y);
+        }
     }
 }

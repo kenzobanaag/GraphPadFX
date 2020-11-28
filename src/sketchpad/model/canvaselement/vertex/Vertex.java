@@ -14,6 +14,7 @@ import sketchpad.constants.ColorScheme;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
 import sketchpad.controller.ProgramEventController;
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.model.canvaselement.edge.Edges;
 
 import java.util.UUID;
@@ -33,6 +34,7 @@ public class Vertex implements Node {
     private final StackPane node;
     private Line edgeGuide;
     private Edges edges;
+    private Paint currentFill;
 
     private final String SELECTION_STYLE = String.format("-fx-font-size: %d; " +
             "-fx-font-family: Calibri;" +
@@ -43,6 +45,7 @@ public class Vertex implements Node {
             "-fx-stroke-width: %d", EDGE_COLOR, EDGE_STROKE);
 
     public Vertex(double x, double y) {
+        currentFill = NODE;
         initShape();
         initLabel();
         value = 0;
@@ -65,7 +68,7 @@ public class Vertex implements Node {
 
     private void initShape() {
         radius = Sizes.Node.RADIUS;
-        shape = new Circle(radius, ColorScheme.Node.NODE);
+        shape = new Circle(radius, currentFill);
     }
 
     private void setListeners() {
@@ -74,24 +77,23 @@ public class Vertex implements Node {
                 new DeleteNode(this).execute();
             }
             else if(event.getButton().equals(MouseButton.PRIMARY)) {
-                CanvasController.identifyNode(this);
+                CanvasController.select(this);
             }
         };
         node.addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
 
         node.setOnMouseDragged(event -> {
-            if(ProgramEventController.isMovable()) {
+            if(ProgramEventController.isMovable()) { // || or some other macro like ctrl would make directed edges.
                 double x = node.getLayoutX() + event.getX() - radius;
                 double y = node.getLayoutY() + event.getY() - radius;
                 node.relocate(x, y);
                 resetEdgeGuide(event.getSceneX(), event.getSceneY());
-                // todo: need to adjust edges connected to this node.
+                CanvasController.adjustEdges(this);
             }
             else {
                 // set line end x,y
                 edgeGuide.setEndX(event.getSceneX());
                 edgeGuide.setEndY(event.getSceneY());
-                CanvasController.setStartNode(this);
             }
             node.toFront();
         });
@@ -110,6 +112,35 @@ public class Vertex implements Node {
         };
 
         node.addEventHandler(MouseEvent.MOUSE_RELEASED, onMouseReleased);
+
+        EventHandler<KeyEvent> keyPressed = event -> {
+            switch (event.getCode()) {
+                case DIGIT1: currentFill = NODE;
+                    break;
+                case DIGIT2: currentFill = GREEN_NODE;
+                    break;
+                case DIGIT3: currentFill = GOLD_NODE;
+                    break;
+                case DIGIT4: currentFill = INVERTED_NODE;
+                    break;
+                case DIGIT5: currentFill = BLACK_NODE;
+                    break;
+                case DIGIT6: currentFill = ORANGE_NODE;
+                    break;
+                case DIGIT7: currentFill = BLUE_NODE;
+                    break;
+                case DIGIT8: currentFill = PURPLE_NODE;
+                    break;
+                case DIGIT9: currentFill = BROWN_NODE;
+                    break;
+                case DIGIT0: currentFill = LIGHT_NODE;
+                    break;
+                default: return;
+            }
+            deselect();
+        };
+
+        node.addEventHandler(KeyEvent.KEY_PRESSED, keyPressed);
     }
 
     private void resetEdgeGuide(double x, double y) {
@@ -117,10 +148,6 @@ public class Vertex implements Node {
         edgeGuide.setStartY(y);
         edgeGuide.setEndX(x);
         edgeGuide.setEndY(y);
-    }
-
-    public Pane getNode() {
-        return node;
     }
 
     public void setOrder(int num) {
@@ -133,38 +160,32 @@ public class Vertex implements Node {
         return id;
     }
 
+    @Override
+    public javafx.scene.Node getCanvasElement() {
+        return node;
+    }
+
+    @Override
+    public void highlight(Paint paintStyle) {
+        shape.setFill(paintStyle);
+    }
+
+    @Override
+    public String getName() {
+        return order+"";
+    }
+
     public void select() {
         shape.setFill(ColorScheme.Node.SELECTED);
     }
 
     public void deselect() {
-        shape.setFill(ColorScheme.Node.NODE);
-    }
-
-    public void showName() {
-        label.setText(order+"");
-        label.setVisible(true);
-    }
-
-    /*
-    * todo: switch from showing name to showing value
-    * */
-    public void showValue() {
-        label.setText(value+"");
-        label.setVisible(true);
-    }
-
-    public void color(Paint paintStyle) {
-        shape.setFill(paintStyle);
+        shape.setFill(currentFill);
     }
 
     @Override
     public int getValue() {
         return value;
-    }
-
-    public void hideName() {
-        label.setVisible(false);
     }
 
     public Line getEdgeGuide() {
@@ -174,5 +195,30 @@ public class Vertex implements Node {
     @Override
     public Edges getEdges() {
         return edges;
+    }
+
+    @Override
+    public void setValue(int newValue) {
+        value = newValue;
+    }
+
+    @Override
+    public void showLabel(DisplayTypes type) {
+        label.setVisible(true);
+        String labelStr = "";
+        switch (type) {
+            case NAME: labelStr = order+"";
+                break;
+            case VALUE: labelStr = value+"";
+                break;
+            case DEGREE: labelStr = edges.getDegree()+"";
+                break;
+        }
+        label.setText(labelStr);
+    }
+
+    @Override
+    public void hideLabel() {
+        label.setVisible(false);
     }
 }

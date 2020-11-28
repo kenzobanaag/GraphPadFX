@@ -1,5 +1,6 @@
 package sketchpad.model.canvaselement.edge;
 
+import com.sun.org.apache.bcel.internal.generic.ARETURN;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -9,6 +10,7 @@ import javafx.scene.shape.Line;
 import sketchpad.constants.ColorScheme;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.model.canvaselement.Element;
 import sketchpad.model.canvaselement.vertex.Node;
 import test.model.TestingSpecifics;
@@ -18,6 +20,9 @@ import java.util.UUID;
 import static sketchpad.constants.ColorScheme.Edge.EDGE;
 import static sketchpad.constants.ColorScheme.Edge.SELECTED;
 
+/*
+* For loop edges, we can maybe create UndirectedLoop and DirectedLoop
+* */
 
 public abstract class Edge implements Element {
 
@@ -48,8 +53,8 @@ public abstract class Edge implements Element {
         setEdgeName(parent.getOrder(), child.getOrder());
         id = UUID.randomUUID().toString();
         if(!TestingSpecifics.isTesting()) // HAHAHAHAHAHAHAHA
-            initWidgets(parent.getNode().getLayoutX(), parent.getNode().getLayoutY(),
-                    child.getNode().getLayoutX(), child.getNode().getLayoutY()); // note: comment out when testing
+            initWidgets(parent.getCanvasElement().getLayoutX(), parent.getCanvasElement().getLayoutY(),
+                    child.getCanvasElement().getLayoutX(), child.getCanvasElement().getLayoutY()); // note: comment out when testing
         initListeners();
     }
 
@@ -73,25 +78,48 @@ public abstract class Edge implements Element {
     private void initListeners() {
         EventHandler<MouseEvent> clickHandler = event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)) {
-                CanvasController.select(this);
+               CanvasController.select(this);
             }
             else if(event.getButton().equals(MouseButton.SECONDARY)) { // right click
-                System.out.println("Remove this edge");
+                CanvasController.removeEdge(this);
             }
         };
 
         edge.addEventHandler(MouseEvent.MOUSE_PRESSED, clickHandler);
     }
 
+    @Override
+    public void showLabel(DisplayTypes type) {
+        edgeNameLabel.setVisible(true);
+        String labelStr = "";
+        switch (type) {
+            case NAME: labelStr = edgeName;
+                break;
+            case VALUE: labelStr = value+"";
+                break;
+            case DEGREE: return;
+        }
+        edgeNameLabel.setText(labelStr);
+    }
+
+    @Override
+    public void hideLabel() {
+        edgeNameLabel.setVisible(false);
+    }
+
     private void setEdgeName(int parentOrder, int childOrder) {
         edgeName = String.format("n%d-n%d", parentOrder, childOrder);
+    }
+
+    public void setValue(int newValue) {
+        value = newValue;
     }
 
     public int getValue() {
         return value;
     }
 
-    public String getEdgeName() {
+    public String getName() {
         return edgeName;
     }
 
@@ -106,7 +134,6 @@ public abstract class Edge implements Element {
     public String getId() {
         return id;
     }
-
     /*
     * Color edge and all thats connected to it?
     * */
@@ -118,10 +145,12 @@ public abstract class Edge implements Element {
         edge.setStroke(EDGE);
     }
 
+    public abstract void adjustEdge(double x, double y, String nodeId);
+
     public abstract EdgeTypes getType();
     public abstract javafx.scene.Node getCanvasElement();
 
     public enum EdgeTypes {
-        DIRECTED, UNDIRECTED;
+        DIRECTED, UNDIRECTED, DIRECTED_LOOP, UNDIRECTED_LOOP;
     }
 }

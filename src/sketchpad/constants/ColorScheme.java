@@ -18,10 +18,17 @@ public final class ColorScheme {
 
     public static final class Node {
         public static final String NODE_STR = "#028f81";
-        public static final String NODE_STR2 = "#03da5a"; //green
-        public static final String NODE_STR3 = "#0384da";
+        public static final String NODE_STR2 = "#00FF00"; //green
+        public static final String NODE_STR3 = "#8D0DF1";
+        public static final String NODE_STR4 = "#FF5500";
         public static final String NODE_STR5 = "#DA0318";
+        public static final String NODE_STR6 = "#FD707E";
+        public static final String NODE_STR7 = "#1919FF";
+        public static final String NODE_STR8 = "#372C85";
+        public static final String NODE_STR9 = "#65452C";
+        public static final String NODE_STR0 = "#4A474C";
         public static final String GOLD_STR = "#FFBA00";
+        // todo: Create 9 different colors of nodes. 1 is NODE_STR
         public static final String SELECTED_STR = NODE_STR5;
         public static final String NODE_TEXT_STR = "#1C1A18";
         public static final Color NODE = Color.valueOf(NODE_STR);
@@ -29,6 +36,13 @@ public final class ColorScheme {
         public static final Color SELECTED = Color.valueOf(SELECTED_STR);
         public static final Color GOLD_NODE = Color.valueOf(GOLD_STR);
         public static final Color GREEN_NODE = Color.valueOf(NODE_STR2);
+        public static final Color INVERTED_NODE = Color.valueOf(NODE_STR6);
+        public static final Color BLACK_NODE = Color.valueOf(NODE_STR3);
+        public static final Color ORANGE_NODE = Color.valueOf(NODE_STR4);
+        public static final Color BLUE_NODE = Color.valueOf(NODE_STR7);
+        public static final Color PURPLE_NODE = Color.valueOf(NODE_STR8);
+        public static final Color BROWN_NODE = Color.valueOf(NODE_STR9);
+        public static final Color LIGHT_NODE = Color.valueOf(NODE_STR0);
     }
 
     public static final class Edge {

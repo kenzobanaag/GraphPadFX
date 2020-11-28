@@ -48,6 +48,19 @@ public class Edges {
         return adjacentNodes;
     }
 
+    public List<String> getEdgeList() {
+        return edgeList;
+    }
+
+    public List<String> edgeListClone() {
+        LinkedList<String> deepCloneArray = new LinkedList<>();
+        for(String edgeId : edgeList)
+            if(!deepCloneArray.contains(edgeId))
+                deepCloneArray.add(edgeId);
+
+        return deepCloneArray;
+    }
+
     public boolean isUndirected() {
         return isAllUndirected;
     }

@@ -1,5 +1,6 @@
 package sketchpad.controller;
 
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.view.BottomDisplay;
 
 public class BottomDisplayController {
@@ -14,7 +15,6 @@ public class BottomDisplayController {
     public static void init(BottomDisplay display) {
         if(instance == null)
             instance = new BottomDisplayController(display);
-
     }
 
     public static void setNodes(int numNodes) {
@@ -27,11 +27,20 @@ public class BottomDisplayController {
         display.setEdges(numEdges);
     }
 
-    public static void showSelection(int order) {
-        display.showSelection(order);
+    // refactored to accept string instead
+    public static void showSelection(String label, int value) {
+        display.showSelection(label, value);
     }
 
     public static void hideSelection() {
         display.hideSelection();
+    }
+
+    public static void showLabel(DisplayTypes type) {
+        display.showLabel(type);
+    }
+
+    public static void hideLabel() {
+        display.hideLabel();
     }
 }
