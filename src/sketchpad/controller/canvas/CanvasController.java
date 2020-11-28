@@ -4,8 +4,6 @@ import javafx.event.EventHandler;
 import javafx.scene.input.*;
 import javafx.scene.paint.Paint;
 import sketchpad.commands.nodes.AddNode;
-import sketchpad.commands.graph.ToggleName;
-import sketchpad.constants.ColorScheme;
 import sketchpad.controller.BottomDisplayController;
 import sketchpad.controller.ConsoleController;
 import sketchpad.model.canvaselement.Element;
@@ -13,40 +11,14 @@ import sketchpad.model.canvaselement.edge.EdgeBuilder;
 import sketchpad.model.collision.Collision;
 import sketchpad.model.canvaselement.edge.Edge;
 import sketchpad.model.canvaselement.vertex.Node;
-import sketchpad.view.BottomDisplay;
 import sketchpad.view.Canvas;
 
 import java.util.LinkedHashMap;
 
 import static sketchpad.constants.Sizes.Canvas.SELECTION_COUNT;
 
-/*
-* todo: Break this class to a smaller class called CanvasData
-*
-*       That class will hold all data, and all methods that manipulate the data
-*       This class should handle communications between the data class, and printing to the canvas view.
-* */
-public class CanvasController { // todo: CanvasController has a class CanvasData, this holds all the data, and will do data computations
-                                // canvasController will only be responsible for communications with other controllers.
+public class CanvasController {
 
-    /*
-    * fixme: Should we have selectionElements?
-    *
-    * Do we even need to select an edge?
-    *
-    * We can use select to change values of elements. Basically node and edge both can have values.
-    *
-    * Todo: On bottom display, show value and have an option to change it.
-    *
-    * Canvas instructions go here.
-    *
-    * Anything to do with data will be on CanvasData
-    *
-    * */
-
-    //private static int elements = 0;
-    //private static LinkedHashMap<String, Node> nodeMap;
-    //private static HashMap<String, Edge> edgeMap; //adjacency map, string is nodeId
     private static Canvas canvas;
     private static CanvasController instance;
     private static CanvasData data;
@@ -97,24 +69,6 @@ public class CanvasController { // todo: CanvasController has a class CanvasData
 
         canvas.getLayout().addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
         canvas.getLayout().addEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
-    }
-
-    /*
-     * Highlight vs select
-     *
-     * Select will put it on the canvas' selection
-     *
-     * Highlight will only change the nodes' color
-     * */
-    public static void highlight(String elementId) {
-        highlight(elementId, ColorScheme.Node.SELECTED);
-    }
-
-    public static void highlight(String elementId, Paint paintStyle) {
-        if(data.getNodeMap().containsKey(elementId))
-            data.getNodeMap().get(elementId).highlight(paintStyle);
-        else if(data.getEdgeMap().containsKey(elementId))
-            data.getEdgeMap().get(elementId).highlight(paintStyle);
     }
 
     public static void addNode(Node node) {
@@ -266,16 +220,17 @@ public class CanvasController { // todo: CanvasController has a class CanvasData
         // hint: Could use golden ratio, like how sunflowers position its seeds
     }
 
-    /*
-    * Refactor: remove identify node, either make it edit element or select node
-    *
-    * select node basically just highlights the node, then makes it editable.
-    * */
+    public static void highlight(String elementId, Paint paintStyle) {
+        if(data.getNodeMap().containsKey(elementId))
+            data.getNodeMap().get(elementId).highlight(paintStyle);
+        else if(data.getEdgeMap().containsKey(elementId))
+            data.getEdgeMap().get(elementId).highlight(paintStyle);
+    }
 
     public static void select(Element element) {
         changeSelection(element);
         if(element != null) {
-            highlight(element.getId());
+            element.select();
             BottomDisplayController.showSelection(element.getName(), element.getValue()); // show the bottom display tings
             element.getCanvasElement().requestFocus();
         }
@@ -294,7 +249,7 @@ public class CanvasController { // todo: CanvasController has a class CanvasData
         deselect(elementSelection[LAST]);
     }
 
-    // fixme:
+    // fixme
 //    private static void toggleName() {
 //        new ToggleName(nodeMap, showLabel).execute();
 //    }
