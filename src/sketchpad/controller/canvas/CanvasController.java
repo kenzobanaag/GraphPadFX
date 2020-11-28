@@ -3,14 +3,17 @@ package sketchpad.controller.canvas;
 import javafx.event.EventHandler;
 import javafx.scene.input.*;
 import javafx.scene.paint.Paint;
+import sketchpad.commands.graph.ToggleName;
 import sketchpad.commands.nodes.AddNode;
 import sketchpad.controller.BottomDisplayController;
 import sketchpad.controller.ConsoleController;
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.model.canvaselement.Element;
 import sketchpad.model.canvaselement.edge.EdgeBuilder;
 import sketchpad.model.collision.Collision;
 import sketchpad.model.canvaselement.edge.Edge;
 import sketchpad.model.canvaselement.vertex.Node;
+import sketchpad.view.BottomDisplay;
 import sketchpad.view.Canvas;
 
 import java.util.LinkedHashMap;
@@ -26,6 +29,7 @@ public class CanvasController {
     private static Element[] elementSelection;
     private static final int CURRENT = 0, LAST = 1;
     private static Collision collision;
+    private static DisplayTypes labelType = DisplayTypes.NAME;
 
     public static void init(Canvas canvas) {
         if(instance == null)
@@ -63,7 +67,21 @@ public class CanvasController {
         EventHandler<KeyEvent> keyHandler = event -> {
           if(event.getCode().equals(KeyCode.ALT)) {
               toggleShow();
-              //toggleName();
+              toggleName();
+              toggleShownLabel();
+          }
+          else if(event.getCode().equals(KeyCode.X)) { // toggle display
+              switch (labelType) {
+                  case NAME: labelType = DisplayTypes.VALUE;
+                     break;
+                  // if display is showing
+                  case VALUE: labelType = DisplayTypes.DEGREE;
+                      break;
+                  case DEGREE: labelType = DisplayTypes.NAME;
+                      break;
+              }
+              toggleName();
+              toggleShownLabel();
           }
         };
 
@@ -76,7 +94,7 @@ public class CanvasController {
         data.addNode(node);
         canvas.getLayout().getChildren().addAll(node.getEdgeGuide(), node.getNode()); // add to canvas
         BottomDisplayController.setNodes(data.getNodeCount());
-        //toggleName(); // refactor this. Basically, this computes the whole map again and again, when it should just toggle the new node
+        toggleName();
         focus();
     }
 
@@ -85,6 +103,7 @@ public class CanvasController {
         deselect(node);
         canvas.getLayout().getChildren().removeAll(node.getEdgeGuide(), node.getNode());
         BottomDisplayController.setNodes(data.getNodeCount());
+        toggleName();
         focus();
     }
 
@@ -103,6 +122,7 @@ public class CanvasController {
                 BottomDisplayController.setEdges(data.getEdgeCount());
                 focus();
                 deselect(elementSelection[CURRENT]); // fixme: why do we want to deselect this?
+                toggleName();
             }
         }
     }
@@ -127,7 +147,7 @@ public class CanvasController {
             // do some other stuff
             canvas.getLayout().getChildren().add(edge.getCanvasElement()); // draw it on canvas
             BottomDisplayController.setEdges(data.getEdgeCount());
-            //toggleName(); // refactor this. Basically, this computes the whole map again and again, when it should just toggle the new node
+            toggleName();
             focus();
         }
     }
@@ -137,6 +157,7 @@ public class CanvasController {
         data.removeEdge(edge);
         deselect(edge);
         BottomDisplayController.setEdges(data.getEdgeCount());
+        toggleName();
     }
 
     /*
@@ -185,6 +206,7 @@ public class CanvasController {
     public static void changeElementValue(int value) {
         if(elementSelection[CURRENT] != null) {
             elementSelection[CURRENT].setValue(value);
+            toggleName();
         }
     }
 
@@ -250,9 +272,12 @@ public class CanvasController {
     }
 
     // fixme
-//    private static void toggleName() {
-//        new ToggleName(nodeMap, showLabel).execute();
-//    }
+    /*
+    * todo: We need to pass in the types so we can toggle which display is being shown
+    * */
+    private static void toggleName() {
+        new ToggleName(data.getNodeMap(), data.getEdgeMap(), labelType, showLabel).execute();
+    }
 
     private static void toggleShow() {
         showLabel = !showLabel;
@@ -265,5 +290,12 @@ public class CanvasController {
     private static boolean isCanvasClear(double x, double y) {
         return collision.nodeClear(data.getNodeMap(), x,y)
                 && collision.edgeClear(data.getEdgeMap(), x,y);
+    }
+
+    private static void toggleShownLabel() {
+        if(showLabel)
+            BottomDisplayController.showLabel(labelType);
+        else
+            BottomDisplayController.hideLabel();
     }
 }

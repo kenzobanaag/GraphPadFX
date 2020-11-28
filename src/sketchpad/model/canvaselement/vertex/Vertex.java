@@ -15,6 +15,7 @@ import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
 import sketchpad.controller.ProgramEventController;
 import sketchpad.controller.canvas.CanvasData;
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.model.canvaselement.edge.Edges;
 
 import java.util.UUID;
@@ -175,10 +176,6 @@ public class Vertex implements Node {
         return value;
     }
 
-    public void hideName() {
-        label.setVisible(false);
-    }
-
     public Line getEdgeGuide() {
         return edgeGuide;
     }
@@ -191,5 +188,25 @@ public class Vertex implements Node {
     @Override
     public void setValue(int newValue) {
         value = newValue;
+    }
+
+    @Override
+    public void showLabel(DisplayTypes type) {
+        label.setVisible(true);
+        String labelStr = "";
+        switch (type) {
+            case NAME: labelStr = order+"";
+                break;
+            case VALUE: labelStr = value+"";
+                break;
+            case DEGREE: labelStr = edges.getDegree()+"";
+                break;
+        }
+        label.setText(labelStr);
+    }
+
+    @Override
+    public void hideLabel() {
+        label.setVisible(false);
     }
 }

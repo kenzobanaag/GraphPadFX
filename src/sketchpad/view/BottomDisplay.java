@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.utils.InputValidator;
 import sketchpad.utils.TryParse;
 
@@ -21,6 +22,7 @@ public class BottomDisplay extends LayoutContainer{
     private final Label selectionNameLabel;
     private final Label selectionTitleLabel;
     private final Label valueTitleLabel;
+    private final Label shownLabel;
     private final TextField valueInputField;
     private final String TITLE_STYLE = String.format("-fx-font-size: %d; " +
             "-fx-font-family: Calibri;" +
@@ -41,7 +43,7 @@ public class BottomDisplay extends LayoutContainer{
     private Pane layout;
 
     public BottomDisplay() {
-        layout = new HBox(10);
+        layout = new HBox(15);
         layout.setStyle(BACKGROUND);
 
         Label edgesTitleLabel = new Label("m = ");
@@ -67,10 +69,14 @@ public class BottomDisplay extends LayoutContainer{
         valueInputField.setPrefSize(35,35);
         valueInputField.setVisible(false);
 
+        shownLabel = new Label();
+        shownLabel.setStyle(TITLE_STYLE);
+        shownLabel.setVisible(false);
+
         setValueChangedListener();
 
         layout.getChildren().addAll(edgesTitleLabel, edgesInputLabel, nodesTitleLabel, nodesInputLabel,
-                selectionTitleLabel, selectionNameLabel, valueTitleLabel,valueInputField);
+                selectionTitleLabel, selectionNameLabel, valueTitleLabel,valueInputField, shownLabel);
     }
 
     private void setValueChangedListener() {
@@ -102,6 +108,24 @@ public class BottomDisplay extends LayoutContainer{
         selectionTitleLabel.setVisible(false);
         valueInputField.setVisible(false);
         valueTitleLabel.setVisible(false);
+    }
+
+    public void showLabel(DisplayTypes type) {
+        String labelStr = "";
+        switch (type) {
+            case NAME: labelStr = "Label: Name";
+                break;
+            case VALUE: labelStr = "Label: Value";
+                break;
+            case DEGREE: labelStr = "Label: Degree";
+                break;
+        }
+        shownLabel.setText(labelStr);
+        shownLabel.setVisible(true);
+    }
+
+    public void hideLabel() {
+        shownLabel.setVisible(false);
     }
 
     @Override

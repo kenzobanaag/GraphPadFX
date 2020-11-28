@@ -1,5 +1,6 @@
 package sketchpad.controller;
 
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.view.BottomDisplay;
 
 public class BottomDisplayController {
@@ -33,5 +34,13 @@ public class BottomDisplayController {
 
     public static void hideSelection() {
         display.hideSelection();
+    }
+
+    public static void showLabel(DisplayTypes type) {
+        display.showLabel(type);
+    }
+
+    public static void hideLabel() {
+        display.hideLabel();
     }
 }

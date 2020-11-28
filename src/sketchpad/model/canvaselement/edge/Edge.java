@@ -1,5 +1,6 @@
 package sketchpad.model.canvaselement.edge;
 
+import com.sun.org.apache.bcel.internal.generic.ARETURN;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -9,6 +10,7 @@ import javafx.scene.shape.Line;
 import sketchpad.constants.ColorScheme;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
+import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.model.canvaselement.Element;
 import sketchpad.model.canvaselement.vertex.Node;
 import test.model.TestingSpecifics;
@@ -84,6 +86,25 @@ public abstract class Edge implements Element {
         };
 
         edge.addEventHandler(MouseEvent.MOUSE_PRESSED, clickHandler);
+    }
+
+    @Override
+    public void showLabel(DisplayTypes type) {
+        edgeNameLabel.setVisible(true);
+        String labelStr = "";
+        switch (type) {
+            case NAME: labelStr = edgeName;
+                break;
+            case VALUE: labelStr = value+"";
+                break;
+            case DEGREE: return;
+        }
+        edgeNameLabel.setText(labelStr);
+    }
+
+    @Override
+    public void hideLabel() {
+        edgeNameLabel.setVisible(false);
     }
 
     private void setEdgeName(int parentOrder, int childOrder) {

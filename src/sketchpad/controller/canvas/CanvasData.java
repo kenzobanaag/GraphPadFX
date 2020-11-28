@@ -40,9 +40,9 @@ public class CanvasData {
         for(String edgeId : edgeIds) {
             CanvasController.removeEdge(edgeMap.get(edgeId));
         }
-
         nodeMap.remove(node.getId());
-        --order;
+        if(nodeMap.size() == 0)
+            order = 0;
     }
 
     protected void addEdge(Edge edge) {

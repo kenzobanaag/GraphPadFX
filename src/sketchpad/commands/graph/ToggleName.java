@@ -1,13 +1,18 @@
 package sketchpad.commands.graph;
 
 import sketchpad.commands.Command;
+import sketchpad.model.canvaselement.DisplayTypes;
+import sketchpad.model.canvaselement.edge.Edge;
 import sketchpad.model.canvaselement.vertex.Node;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class ToggleName implements Command {
 
-    private LinkedHashMap<String, Node> nodeList;
+    private LinkedHashMap<String, Node> nodeMap;
+    private HashMap<String, Edge> edgeMap;
+    private DisplayTypes type;
     private boolean show;
 
     /*
@@ -18,20 +23,26 @@ public class ToggleName implements Command {
     * TODO: Display: Show what the numbers mean; ORDER(NAME), VALUE or DEGREE
     * */
 
-    public ToggleName(LinkedHashMap<String, Node> nodeList, boolean show) {
-        this.nodeList = nodeList;
+    public ToggleName(LinkedHashMap<String, Node> nodeList, HashMap<String, Edge> edgeList, DisplayTypes type, boolean show) {
+        this.nodeMap = nodeList;
         this.show = show;
+        this.type = type;
+        edgeMap = edgeList;
     }
 
     @Override
     public void execute() {
         if(show) {
-            for(Node node : nodeList.values())
-                node.showName();
+            for(Node node : nodeMap.values())
+                node.showLabel(type);
+            for(Edge edge : edgeMap.values())
+                edge.showLabel(type);
         }
         else {
-            for(Node node : nodeList.values())
-                node.hideName();
+            for(Node node : nodeMap.values())
+                node.hideLabel();
+            for(Edge edge : edgeMap.values())
+                edge.hideLabel();
         }
     }
 }

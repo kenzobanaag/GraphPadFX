@@ -12,4 +12,6 @@ public interface Element {
     String getName();
     int getValue();
     void setValue(int newValue);
+    void showLabel(DisplayTypes type);
+    void hideLabel();
 }
