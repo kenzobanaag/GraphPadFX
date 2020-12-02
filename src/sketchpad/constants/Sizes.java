@@ -17,7 +17,7 @@ public final class Sizes {
         public static final int LABEL_SIZE = 30;
         public static final int WIDTH = 50;
         public static final int HEIGHT = 50;
-        public static final int RADIUS = 25;
+        public static final int RADIUS = 20;
         public static final int PADDING = 5;
     }
 

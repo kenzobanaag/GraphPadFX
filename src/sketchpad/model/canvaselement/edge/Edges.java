@@ -1,5 +1,6 @@
 package sketchpad.model.canvaselement.edge;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,8 +16,9 @@ import java.util.List;
 * */
 public class Edges {
 
-    private List<String> edgeList;
+    private List<String> edgeList; // refactor: see if we could remove this
     private List<String> adjacentNodes;
+    private HashMap<String, List<String>> edgeMap;
     private int inDegree;
     private int outDegree;
     private String parentNode;
@@ -27,6 +29,7 @@ public class Edges {
         parentNode = nodeId;
         edgeList = new LinkedList<>();
         adjacentNodes = new LinkedList<>();
+        edgeMap = new HashMap<>();
         inDegree = 0;
         outDegree = 0;
         degree = 0;
@@ -92,6 +95,10 @@ public class Edges {
         }
         ++degree;
         edgeList.add(edge.getId());
+        // we want to know if there are parallel edges.
+        handleParallelEdgesAdd(edge);
+
+        System.out.println(edgeMap);
     }
 
     private void handleDelete(Edge edge) {
@@ -99,33 +106,19 @@ public class Edges {
             case DIRECTED:
                 // set in and out
                 handleRemoveDirected(edge);
-                //edgeList.remove(edge.getId()); // note: order matters for this removal
-                //recalculateIsUndirected();
                 break;
             case UNDIRECTED:
                 --outDegree;
                 --inDegree;
-                //edgeList.remove(edge.getId()); // note: order doesnt matter for this remove
                 adjacentNodes.remove(edge.childId); // question is, is it always the child id that is added.
         }
         --degree;
         edgeList.remove(edge.getId());
-    }
+        // handle removing
+        handleParallelEdgesRemove(edge);
 
-    /*
-    * check all edges if undirected still
-    *
-    * note: Might not be needed
-    * */
-//    private void recalculateIsUndirected() {
-//        for(Edge edge : edgeList) {
-//            if(edge.getType().equals(Edge.EdgeTypes.DIRECTED)) {
-//                isAllUndirected = false;
-//                return;
-//            }
-//        }
-//        isAllUndirected = true;
-//    }
+        System.out.println(edgeMap);
+    }
 
     private void handleAddDirected(Edge edge) {
         if(parentNode.equals(edge.parentId)) {
@@ -143,5 +136,45 @@ public class Edges {
         }
         else
             --inDegree;
+    }
+
+    private String calculateKey(Edge edge) {
+
+        String[] edgePairId = edge.edgeName.split("-");
+
+        if(edgePairId[0].compareTo(edgePairId[1]) > 0) //[0] > [1]
+            return edgePairId[1] + edgePairId[0];
+        else // [0] < [1] || [0] == [1]
+            return edgePairId[0] + edgePairId[1];
+    }
+
+    private void handleParallelEdgesAdd(Edge edge) {
+        String key = calculateKey(edge);
+        List<String> edgeList = edgeMap.getOrDefault(key, new LinkedList<>());
+        edgeList.add(edge.getId());
+        edgeMap.put(key, edgeList);
+    }
+
+    private void handleParallelEdgesRemove(Edge edge) {
+        String key = calculateKey(edge);
+        List<String> edgeList = edgeMap.getOrDefault(key, new LinkedList<>());
+        edgeList.remove(edge.getId());
+        edgeMap.put(key, edgeList);
+    }
+
+    public HashMap<String, List<String>> getEdgeMap() {
+        return edgeMap;
+    }
+
+    public boolean containsParallel() {
+        for (List<String> edges : edgeMap.values()) {
+            if(edges.size() > 1) // more than one edge
+                return true;
+        }
+        return false;
+    }
+
+    public List<String> getParallelEdges(Edge edge) {
+        return edgeMap.get(calculateKey(edge));
     }
 }
