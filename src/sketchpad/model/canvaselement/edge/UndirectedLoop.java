@@ -35,7 +35,7 @@ public class UndirectedLoop extends Edge{
     }
 
     public void initArc(double x, double y) {
-        loop = new Arc(x, y, 20,80,0,180);
+        loop = new Arc(x, y, RADIUS-3,80,0,180);
         loop.setFill(Color.TRANSPARENT);
         loop.setStroke(ColorScheme.Edge.EDGE);
         loop.setStrokeWidth(Sizes.Edge.EDGE_STROKE);
