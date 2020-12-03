@@ -7,6 +7,7 @@ import sketchpad.commands.graph.ToggleName;
 import sketchpad.commands.nodes.AddNode;
 import sketchpad.controller.BottomDisplayController;
 import sketchpad.controller.ConsoleController;
+import sketchpad.model.algorithms.Algorithm;
 import sketchpad.model.canvaselement.DisplayTypes;
 import sketchpad.model.canvaselement.Element;
 import sketchpad.model.canvaselement.edge.EdgeBuilder;
@@ -45,6 +46,11 @@ public class CanvasController {
         focus();
     }
 
+    public static void performAlgorithm(Algorithm algorithm) {
+        algorithm.initVariables(data.getNodeMap(), data.getEdgeMap(), elementSelection);
+        algorithm.execute();
+    }
+
     private static void setEvents(Canvas canvas) {
         EventHandler<MouseEvent> clickHandler = event -> {
             double x = event.getX();
@@ -60,6 +66,7 @@ public class CanvasController {
                 if(isCanvasClear(x,y)) {// check if on top of node
                     deselect(elementSelection[CURRENT]);
                     event.consume();
+                    focus();
                 }
             }
         };
@@ -141,6 +148,7 @@ public class CanvasController {
             canvas.getLayout().getChildren().add(node.getCanvasElement());
     }
 
+    // fixme: use the other addEdge..
     public static void addEdge(String nodeId, Edge edge) {
         if(findNode(nodeId) != null) { // catch if invalid node
            // CanvasData.addEdge(nodeId, edge); // add to data

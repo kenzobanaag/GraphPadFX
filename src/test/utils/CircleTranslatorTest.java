@@ -46,6 +46,12 @@ class CircleTranslatorTest {
     }
 
     @Test
+    public void testSlope_zero() {
+        // impossible for this to happen
+        assertEquals(0, CircleTranslator.getSlope(100,100,100,100));
+    }
+
+    @Test
     public void testActualPoints() {
         double centerX = 1;
         double centerY = 1;

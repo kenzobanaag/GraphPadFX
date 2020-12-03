@@ -1,7 +1,6 @@
 package sketchpad.model.canvaselement.edge;
 
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -10,23 +9,24 @@ import javafx.scene.shape.Arc;
 import sketchpad.constants.ColorScheme;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.canvas.CanvasController;
+import sketchpad.model.canvaselement.vertex.Node;
 
-import static sketchpad.model.canvaselement.edge.Edge.EdgeTypes.UNDIRECTED_LOOP;
+import static sketchpad.model.canvaselement.edge.Edge.EdgeTypes.DIRECTED_LOOP;
 
-public class UndirectedLoop extends Edge{
+public class DirectedLoop extends Edge{
     /*
-    * todo: remove line from edges object
-    * */
+     * todo: remove line from edges object
+     * */
     private Arc loop;
     private final int RADIUS = Sizes.Node.RADIUS;
 
-    public UndirectedLoop(sketchpad.model.canvaselement.vertex.Node parent, sketchpad.model.canvaselement.vertex.Node child) {
-        super(parent, child, 0);
+    protected DirectedLoop(Node parent, Node child) {
+        super(parent, child);
         initArc(parent.getCanvasElement().getLayoutX() + RADIUS, parent.getCanvasElement().getLayoutY() + RADIUS);
         initListeners();
     }
 
-    public UndirectedLoop(sketchpad.model.canvaselement.vertex.Node parent, sketchpad.model.canvaselement.vertex.Node child, int value) {
+    protected DirectedLoop(Node parent, Node child, int value) {
         super(parent, child, value);
         initArc(parent.getCanvasElement().getLayoutX() + RADIUS, parent.getCanvasElement().getLayoutY() + RADIUS); // 25 is the node raidius
         initListeners();
@@ -55,12 +55,12 @@ public class UndirectedLoop extends Edge{
     }
 
     @Override
-    public EdgeTypes getType() {
-        return UNDIRECTED_LOOP;
+    public Edge.EdgeTypes getType() {
+        return DIRECTED_LOOP;
     }
 
     @Override
-    public Node getCanvasElement() {
+    public javafx.scene.Node getCanvasElement() {
         return loop;
     }
 

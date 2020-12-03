@@ -93,6 +93,10 @@ public abstract class CircleTranslator {
     }
 
     public static double getSlope(double startX, double startY, double endX, double endY) {
-        return (endY - startY) / (endX - startX);
+        double rise = (endY - startY);
+        double run = (endX - startX);
+        if(rise == 0 || run == 0)
+            return 0;
+        return  rise / run ;
     }
 }
