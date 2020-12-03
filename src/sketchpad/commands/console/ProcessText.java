@@ -1,6 +1,7 @@
 package sketchpad.commands.console;
 
 import sketchpad.commands.*;
+import sketchpad.commands.algorithms.ProcessAlgorithm;
 import sketchpad.commands.edges.AddEdge;
 import sketchpad.commands.graph.ClearSketchPad;
 import sketchpad.commands.nodes.AddNode;
@@ -13,8 +14,10 @@ public class ProcessText implements Command {
     private String command = "";
     public static final String PREFIX = "!";
     private static final String RESET_SKETCHPAD = "reset", CLEAR_SCREEN = "cls", COMMANDS = "cmd",
-            ADD_NODE = "node", REMOVE_NODE = "rm", SEARCH_NODE = "search", COUNT = "count", ADD_EDGE="edge";
-    private static final String[] COMMAND_LIST = {RESET_SKETCHPAD, CLEAR_SCREEN, ADD_NODE, REMOVE_NODE, SEARCH_NODE, COUNT};
+            ADD_NODE = "node", REMOVE_NODE = "rm", SEARCH_NODE = "search", COUNT = "count", ADD_EDGE="edge",
+            ALGORITHM = "algorithm";
+    private static final String[] COMMAND_LIST = {RESET_SKETCHPAD, CLEAR_SCREEN, ADD_NODE, REMOVE_NODE, SEARCH_NODE,
+            COUNT, ALGORITHM};
 
     public ProcessText(String[] lines) {
         if(lines.length > 0)
@@ -54,6 +57,9 @@ public class ProcessText implements Command {
                 }
                 else if(command.contains(PREFIX+ADD_EDGE)) {
                     new AddEdge(command).execute();
+                }
+                else if(command.contains(PREFIX+ALGORITHM)) {
+                    new ProcessAlgorithm(command).execute();
                 }
             }
     }

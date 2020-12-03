@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Cycles extends Algorithm {
-    protected Cycles(LinkedHashMap<String, Node> nodeMap, HashMap<String, Edges> edgeMap, Node selected, Node lastSelected) {
-        super(nodeMap, edgeMap, selected, lastSelected);
+    @Override
+    public void setup() {
+
     }
 
     @Override

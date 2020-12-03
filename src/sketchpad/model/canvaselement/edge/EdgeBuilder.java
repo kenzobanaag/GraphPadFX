@@ -1,22 +1,31 @@
 package sketchpad.model.canvaselement.edge;
 
-import sketchpad.model.canvaselement.Element;
+import javafx.scene.input.KeyCode;
+import sketchpad.controller.ProgramEventController;
 import sketchpad.model.canvaselement.vertex.Node;
 
 public abstract class EdgeBuilder {
 
-    // accept a macro as well?
     public static Edge buildEdge(Node parent, Node child) {
-        if(parent.getId().equals(child.getId())) {
-            // loop
-            // if ProgramEventController.shift is pressed, undirected, else directed
-            return new UndirectedLoop(parent, child);
+        if(ProgramEventController.getCurrentKey() != null) {
+            if(ProgramEventController.getCurrentKey().equals(KeyCode.CONTROL)) {
+                if(parent.getId().equals(child.getId())) {
+                    return new DirectedLoop(parent, child);
+                }
+                else {
+                    return new Directed(parent, child);
+                }
+            }
+            else if(ProgramEventController.getCurrentKey().equals(KeyCode.SHIFT)) {
+                if(parent.getId().equals(child.getId())) {
+                    return new UndirectedLoop(parent, child);
+                }
+                else {
+                    return new Undirected(parent, child);
+                }
+            }
         }
-        else {
-            // line
-        }
-
-        // this will do for now
+        // this will never run, but for safety's sake
         return new Undirected(parent, child);
     }
 }

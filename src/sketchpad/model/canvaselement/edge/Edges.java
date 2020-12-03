@@ -79,7 +79,7 @@ public class Edges {
 
     public int getEdgeCount() {
         return edgeList.size();
-    }
+    }  // refactor: see if we could remove this
 
     private void handleAdd(Edge edge) {
         switch (edge.getType()) {
@@ -89,16 +89,14 @@ public class Edges {
                 isAllUndirected = false;
                 break;
             case UNDIRECTED:
-                adjacentNodes.add(edge.childId);
+                handleAddUndirected(edge); // fixme: doesnt really mean that this node is always the child
                 ++outDegree;
                 ++inDegree;
         }
         ++degree;
-        edgeList.add(edge.getId());
+        edgeList.add(edge.getId());  // refactor: see if we could remove this
         // we want to know if there are parallel edges.
         handleParallelEdgesAdd(edge);
-
-        System.out.println(edgeMap);
     }
 
     private void handleDelete(Edge edge) {
@@ -110,14 +108,26 @@ public class Edges {
             case UNDIRECTED:
                 --outDegree;
                 --inDegree;
-                adjacentNodes.remove(edge.childId); // question is, is it always the child id that is added.
+                handleRemoveUndirected(edge); // question is, is it always the child id that is added.
         }
         --degree;
-        edgeList.remove(edge.getId());
+        edgeList.remove(edge.getId());  // refactor: see if we could remove this
         // handle removing
         handleParallelEdgesRemove(edge);
+    }
 
-        System.out.println(edgeMap);
+    private void handleAddUndirected(Edge edge) {
+        if(!edge.getParentId().equals(parentNode))
+            adjacentNodes.add(edge.getParentId());
+        else if (!edge.getChildId().equals(parentNode))
+            adjacentNodes.add(edge.getChildId());
+    }
+
+    private void handleRemoveUndirected(Edge edge) {
+        if(!edge.getParentId().equals(parentNode))
+            adjacentNodes.remove(edge.getParentId());
+        else if (!edge.getChildId().equals(parentNode))
+            adjacentNodes.remove(edge.getChildId());
     }
 
     private void handleAddDirected(Edge edge) {

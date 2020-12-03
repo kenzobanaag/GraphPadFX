@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CircleTranslatorTest {
 
+    private static double QUARTER_CIRCLE = 90.0;
+    private static double NO_DIRECTION = 1;
+
     @Test
     public void angleTest_radians() {
        // assertEquals(.87605, CircleTranslator.getAngle((double)6/5), 0.001);
@@ -43,6 +46,12 @@ class CircleTranslatorTest {
     }
 
     @Test
+    public void testSlope_zero() {
+        // impossible for this to happen
+        assertEquals(0, CircleTranslator.getSlope(100,100,100,100));
+    }
+
+    @Test
     public void testActualPoints() {
         double centerX = 1;
         double centerY = 1;
@@ -50,7 +59,7 @@ class CircleTranslatorTest {
         int num = 3;
         int radius = 1;
 
-        List<Point2D> pointList = CircleTranslator.computePoints(centerX, centerY, slope, num);
+        List<Point2D> pointList = CircleTranslator.computePoints(centerX, centerY, slope, radius, num, QUARTER_CIRCLE, NO_DIRECTION);
 
         assertEquals(num, pointList.size());
 
@@ -60,7 +69,7 @@ class CircleTranslatorTest {
 
         double centerX_node2 = 6;
         double centerY_node2 = 7;
-        List<Point2D> pointList_node2 = CircleTranslator.computePoints(centerX_node2, centerY_node2, slope, num);
+        List<Point2D> pointList_node2 = CircleTranslator.computePoints(centerX_node2, centerY_node2, slope,radius, num, QUARTER_CIRCLE,NO_DIRECTION);
 
         assertEquals(num, pointList_node2.size());
 
@@ -79,7 +88,7 @@ class CircleTranslatorTest {
         int num = 4;
         int radius = 1;
 
-        List<Point2D> pointList = CircleTranslator.computePoints(centerX, centerY, slope, num);
+        List<Point2D> pointList = CircleTranslator.computePoints(centerX, centerY, slope, radius, num, QUARTER_CIRCLE,NO_DIRECTION);
 
         assertEquals(num, pointList.size());
 
@@ -88,7 +97,7 @@ class CircleTranslatorTest {
         }
 
 
-        List<Point2D> pointList_node2 = CircleTranslator.computePoints(centerX_node2, centerY_node2, slope, num);
+        List<Point2D> pointList_node2 = CircleTranslator.computePoints(centerX_node2, centerY_node2, slope,radius, num, QUARTER_CIRCLE,NO_DIRECTION);
 
         assertEquals(num, pointList_node2.size());
 
