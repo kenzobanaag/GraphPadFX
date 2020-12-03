@@ -16,6 +16,8 @@ public class CanvasData {
     private static CanvasData instance;
     private int order = 0;
     private final int OFFSET = Sizes.Node.RADIUS;
+    private double QUARTER_CIRCLE = 90.0;
+    private double NO_DIRECTION = 1;
 
 
     private CanvasData() {
@@ -60,46 +62,49 @@ public class CanvasData {
         nodeMap.get(edge.getParentId()).getEdges().removeEdge(edge);
         nodeMap.get(edge.getChildId()).getEdges().removeEdge(edge);
         edgeMap.remove(edge.getId());
-        adjustIfParallel(edge);
+        adjustIfNotLoop(edge);
     }
 
-    /*
-    * At most, we will only be adjusting one end. unless its a loop?
-    *
-    * take in edge and the node that moved?
-    *
-    * This way we know where the edge is going to relocate
-    * */
+
     protected void adjustEdge(Node node) {
         // note: This is O(n^2), but edgeIds that are not parallel will most likely be flat.
         // using this will allow us to remove edgeList. But, edge list could be useful later so well see
         for(List<String> edgeIds : node.getEdges().getEdgeMap().values()) {
-            if(edgeIds.size() == 1) {
+            if(edgeIds.size() == 1) { // one edged nodes
                 adjustEdgeOnNode(node, edgeIds.get(0));
             }
-            else if(edgeIds.size() > 1 && (edgeMap.get(edgeIds.get(0)).getType() == Edge.EdgeTypes.UNDIRECTED_LOOP ||
+            else if(edgeIds.size() > 1 && (edgeMap.get(edgeIds.get(0)).getType() == Edge.EdgeTypes.UNDIRECTED_LOOP || // arc edges
                     edgeMap.get(edgeIds.get(0)).getType() == Edge.EdgeTypes.DIRECTED_LOOP)) {
                 for(String edgeId : edgeIds) {
                     adjustEdgeOnNode(node, edgeId);
                 }
             }
-            else if(edgeIds.size() > 1) { // need to account for arcs.
+            else if(edgeIds.size() > 1) { // parallel edges
                 adjustIfParallel(edgeMap.get(edgeIds.get(0))); // grab one
             }
         }
     }
 
+    /*
+    * Helper function to adjust node
+    * */
     private void adjustEdgeOnNode(Node node, String edgeId) {
         edgeMap.get(edgeId).adjustEdge(node.getCanvasElement().getLayoutX() + OFFSET,
                 node.getCanvasElement().getLayoutY() + OFFSET, node.getId());
     }
 
     /*
-    * Helper function to remove duplicate code.
+    * Helper function to remove duplicate code. Adjusts parallel edges
     * */
     private void adjustIfParallel(Edge edge) {
         if(edge.getType() != Edge.EdgeTypes.DIRECTED_LOOP && edge.getType() != Edge.EdgeTypes.UNDIRECTED_LOOP
             && nodeMap.get(edge.getParentId()).getEdges().containsParallel()) {
+            adjustParallel(nodeMap.get(edge.getParentId()), edge);
+        }
+    }
+
+    private void adjustIfNotLoop(Edge edge) {
+        if(edge.getType() != Edge.EdgeTypes.DIRECTED_LOOP && edge.getType() != Edge.EdgeTypes.UNDIRECTED_LOOP) {
             adjustParallel(nodeMap.get(edge.getParentId()), edge);
         }
     }
@@ -129,9 +134,9 @@ public class CanvasData {
         List<String> edges = node.getEdges().getParallelEdges(edge);
 
         List<Point2D> startPoints = CircleTranslator.computePoints(parentX + radius,
-                parentY + radius, slope, edges.size());
+                parentY + radius, slope, radius,  edges.size(), QUARTER_CIRCLE, NO_DIRECTION);
         List<Point2D> endPoints = CircleTranslator.computePoints(childX + radius,
-                childY + radius, slope, edges.size());
+                childY + radius, slope, radius, edges.size(), QUARTER_CIRCLE, NO_DIRECTION);
 
         for(int i = 0; i < edges.size(); i++) {
             edgeMap.get(edges.get(i)).adjustEdge(startPoints.get(i).getX(), // adjust start line

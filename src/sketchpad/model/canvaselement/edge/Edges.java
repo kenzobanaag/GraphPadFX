@@ -79,7 +79,7 @@ public class Edges {
 
     public int getEdgeCount() {
         return edgeList.size();
-    }
+    }  // refactor: see if we could remove this
 
     private void handleAdd(Edge edge) {
         switch (edge.getType()) {
@@ -94,11 +94,9 @@ public class Edges {
                 ++inDegree;
         }
         ++degree;
-        edgeList.add(edge.getId());
+        edgeList.add(edge.getId());  // refactor: see if we could remove this
         // we want to know if there are parallel edges.
         handleParallelEdgesAdd(edge);
-
-        System.out.println(edgeMap);
     }
 
     private void handleDelete(Edge edge) {
@@ -113,11 +111,9 @@ public class Edges {
                 adjacentNodes.remove(edge.childId); // question is, is it always the child id that is added.
         }
         --degree;
-        edgeList.remove(edge.getId());
+        edgeList.remove(edge.getId());  // refactor: see if we could remove this
         // handle removing
         handleParallelEdgesRemove(edge);
-
-        System.out.println(edgeMap);
     }
 
     private void handleAddDirected(Edge edge) {

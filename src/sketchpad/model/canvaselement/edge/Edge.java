@@ -33,10 +33,10 @@ public abstract class Edge implements Element {
     protected int value;
     protected boolean isBridge = false;
 
-    protected Pane edgeLayout;
+    protected Pane edgeLayout; // refactor
     protected Line edge;
-    protected Label edgeValueLabel;
-    protected Label edgeNameLabel;
+    protected Label edgeValueLabel; // refactor
+    protected Label edgeNameLabel; // refactor
 
     protected Edge(Node parent, Node child) {
         initVariables(parent, child, 0);
@@ -71,7 +71,7 @@ public abstract class Edge implements Element {
         edge.setStroke(ColorScheme.Edge.EDGE);
         edge.toFront();
         edgeLayout = new Pane(edge);
-        edgeValueLabel = new Label(); // there doesnt need to be a value label, just change name label to value
+        edgeValueLabel = new Label(); // refactor: there doesnt need to be a value label, just change name label to value
         edgeNameLabel = new Label(edgeName);
     }
 

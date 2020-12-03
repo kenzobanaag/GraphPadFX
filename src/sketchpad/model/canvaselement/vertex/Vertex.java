@@ -211,7 +211,7 @@ public class Vertex implements Node {
                 break;
             case VALUE: labelStr = value+"";
                 break;
-            case DEGREE: labelStr = edges.getDegree()+"";
+            case DEGREE: labelStr = edges.getDegree()+""; // todo: support counting degree for directed edges.
                 break;
         }
         label.setText(labelStr);
