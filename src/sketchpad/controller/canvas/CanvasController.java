@@ -17,6 +17,7 @@ import sketchpad.model.canvaselement.vertex.Node;
 import sketchpad.view.BottomDisplay;
 import sketchpad.view.Canvas;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import static sketchpad.constants.Sizes.Canvas.SELECTION_COUNT;
@@ -263,6 +264,17 @@ public class CanvasController {
             element.select();
             BottomDisplayController.showSelection(element.getName(), element.getValue()); // show the bottom display tings
             element.getCanvasElement().requestFocus();
+        }
+    }
+
+    public static void removeAllEdges() {
+        HashMap<String, Edge> deepCloneEdgeMap = new HashMap<>();
+        for(Edge edge : data.getEdgeMap().values()) {
+            deepCloneEdgeMap.put(edge.getId(), edge);
+        }
+
+        for(Edge edge : deepCloneEdgeMap.values()) {
+            removeEdge(edge);
         }
     }
 

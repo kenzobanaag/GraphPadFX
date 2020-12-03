@@ -14,6 +14,8 @@ public class ProcessAlgorithm implements Command {
         // split by space
         command = args;
         //todo: parse args to run some algorithm
+
+        // we want to make sure that 
     }
 
     @Override
