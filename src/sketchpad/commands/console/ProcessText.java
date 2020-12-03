@@ -65,6 +65,8 @@ public class ProcessText implements Command {
                 else if(command.contains(PREFIX+RESET_SKETCHPAD)) {
                     new RemoveAllEdges(command).execute();
                 }
+                else
+                    ConsoleController.consoleWrite("Command not recognized");
             }
     }
 }
