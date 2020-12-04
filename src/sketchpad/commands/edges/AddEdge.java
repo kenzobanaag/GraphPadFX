@@ -103,6 +103,9 @@ public class AddEdge implements Command {
         }
     }
 
+    /*
+    * fixme: theres no point in doing this since we already created the edge. We just need to pass it in.
+    * */
     @Override
     public void execute() {
         CanvasController.addEdge(parentId, edge);

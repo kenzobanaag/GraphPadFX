@@ -66,6 +66,8 @@ public class CanvasController {
             else if(event.getButton().equals(MouseButton.SECONDARY)) {  // right click
                 if(isCanvasClear(x,y)) {// check if on top of node
                     deselect(elementSelection[CURRENT]);
+                    // deselects all items
+                    deselectAll();
                     event.consume();
                     focus();
                 }
@@ -124,15 +126,20 @@ public class CanvasController {
             if(child != null) { // both source and target are valid
                 Node parent = (Node)elementSelection[CURRENT];
                 Edge newEdge = EdgeBuilder.buildEdge(parent, child); // edge builder
-                data.addEdge(newEdge);
-                canvas.getLayout().getChildren().add(newEdge.getCanvasElement());
-                repaintNodes();
-                BottomDisplayController.setEdges(data.getEdgeCount());
-                focus();
+                addEdge(newEdge);
                 deselect(elementSelection[CURRENT]); // fixme: why do we want to deselect this?
-                toggleName();
             }
         }
+    }
+
+    public static void addEdge(Edge edge) {
+        data.addEdge(edge);
+        canvas.getLayout().getChildren().add(edge.getCanvasElement());
+        repaintNodes();
+        BottomDisplayController.setEdges(data.getEdgeCount());
+        focus();
+        //deselect(elementSelection[CURRENT]); // fixme: why do we want to deselect this?
+        toggleName();
     }
 
     /*
@@ -240,6 +247,10 @@ public class CanvasController {
         return data.getNodeMap();
     }
 
+    public static HashMap<String, Edge> getEdgeMap() {
+        return data.getEdgeMap();
+    }
+
     public static void adjustEdges(Node node) {
         data.adjustEdge(node);
     }
@@ -283,6 +294,13 @@ public class CanvasController {
             element.deselect();
             BottomDisplayController.hideSelection();
         }
+    }
+
+    private static void deselectAll() {
+        for(Node node : data.getNodeMap().values())
+            node.deselect();
+        for(Edge edge : data.getEdgeMap().values())
+            edge.deselect();
     }
 
     private static void changeSelection(Element element) {

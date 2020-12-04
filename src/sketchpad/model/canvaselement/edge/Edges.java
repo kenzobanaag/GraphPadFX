@@ -1,5 +1,7 @@
 package sketchpad.model.canvaselement.edge;
 
+import sketchpad.utils.DeepClone;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,12 +58,7 @@ public class Edges {
     }
 
     public List<String> edgeListClone() {
-        LinkedList<String> deepCloneArray = new LinkedList<>();
-        for(String edgeId : edgeList)
-            if(!deepCloneArray.contains(edgeId))
-                deepCloneArray.add(edgeId);
-
-        return deepCloneArray;
+        return DeepClone.createNoDuplicate(edgeList);
     }
 
     public boolean isUndirected() {

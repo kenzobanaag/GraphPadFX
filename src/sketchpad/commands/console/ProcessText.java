@@ -13,7 +13,7 @@ import sketchpad.controller.ConsoleController;
 public class ProcessText implements Command {
 
     private String command = "";
-    public static final String PREFIX = "!";
+    public static final String PREFIX = "!", HELP = "?";
     private static final String RESET_SKETCHPAD = "reset", CLEAR_SCREEN = "cls", COMMANDS = "cmd",
             ADD_NODE = "node", REMOVE_NODE = "rm", SEARCH_NODE = "search", COUNT = "count", ADD_EDGE="edge",
             ALGORITHM = "algorithm", EDGE="edge";
