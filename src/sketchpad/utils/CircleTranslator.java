@@ -17,6 +17,7 @@ public abstract class CircleTranslator {
 
     // direction = positive or negative, positive is from left to right, and negative is right to left.
     private static List<Point2D> pointList;
+    private static double FULL_CIRCLE = 360;
 
     public static List<Point2D> computePoints(double centerX, double centerY, double slope, int radius, int numPoints,
                                               double degree, double direction) {
@@ -98,5 +99,23 @@ public abstract class CircleTranslator {
         if(rise == 0 || run == 0)
             return 0;
         return  rise / run ;
+    }
+
+    /*
+    * returns a list of points that follow a circle path. Helps with balanced node distancing in a shape of a circle.
+    * */
+    public static List<Point2D> getNodesInACircle(double centerX, double centerY, double radius, int nodeCount,
+                                                  double startDegree) {
+        List<Point2D> nodes = new LinkedList<>();
+
+        double currentDegree = startDegree;
+        double nodeDistance = FULL_CIRCLE / nodeCount;
+
+        for(int i = 0; i < nodeCount; i++) {
+            nodes.add(new Point2D(centerX + radius * Math.cos(Math.toRadians(currentDegree)),
+                    centerY + radius * Math.sin(Math.toRadians(currentDegree))));
+            currentDegree -= nodeDistance;
+        }
+        return nodes;
     }
 }

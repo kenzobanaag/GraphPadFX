@@ -1,10 +1,14 @@
 package sketchpad.commands.draw;
 
+import javafx.geometry.Point2D;
 import sketchpad.commands.edges.AddEdge;
 import sketchpad.commands.nodes.AddNode;
 import sketchpad.constants.Sizes;
 import sketchpad.controller.ConsoleController;
 import sketchpad.controller.canvas.CanvasController;
+import sketchpad.utils.CircleTranslator;
+
+import java.util.List;
 
 public class Cycle implements IDrawable{
 
@@ -48,26 +52,19 @@ public class Cycle implements IDrawable{
     // refactor: move to circle translator util?
     private void circledNodes() {
         // center x,y, radius, degree, numPoints.
-
-        double degree = 360.0 / cycleCount;
-
-        double currentDegree = -90;
-
+        double startDegree = -90;
         double canvasRadius = (double)Sizes.Canvas.HEIGHT/2 - Sizes.Node.RADIUS - 50;
-
         double centerX = (double)Sizes.Canvas.WIDTH/2;
         double centerY = (double)Sizes.Canvas.HEIGHT/2;
 
-        for(int i = 0; i < cycleCount; i++) {
-            double firstX = centerX + canvasRadius * Math.cos(Math.toRadians(currentDegree));
-            double firstY = centerY + canvasRadius * Math.sin(Math.toRadians(currentDegree));
-            currentDegree -= degree;
-            new AddNode(firstX, firstY).execute();
-        }
+        List<Point2D> nodePoints = CircleTranslator.getNodesInACircle(centerX, centerY, canvasRadius,
+                cycleCount, startDegree);
 
-        for(int i = 0; i < cycleCount-1; i++) {
+        for(Point2D point : nodePoints) // get nodes balancedly distanced?????
+            new AddNode(point.getX(), point.getY()).execute();
+        for(int i = 0; i < cycleCount-1; i++) // create edges for each node
             new AddEdge(String.format("!edge %d %d", i, i+1)).execute();
-        }
+        // add last edge that connects from last node to first ndoe
         new AddEdge(String.format("!edge %d %d", cycleCount-1, 0)).execute();
     }
 }
