@@ -2,6 +2,7 @@ package sketchpad.commands.graph;
 
 import sketchpad.commands.Command;
 import sketchpad.commands.draw.Cycle;
+import sketchpad.commands.draw.KComplete;
 import sketchpad.controller.ConsoleController;
 import sketchpad.utils.TryParse;
 
@@ -10,7 +11,7 @@ public class DrawGraph implements Command {
     private final int GRAPH_NAME = 1;
     private int graphInput = 0;
     private String[] commands;
-    private final String EMPTY = "", CYCLE = "cycle", COMPLETE = "k";
+    private final String EMPTY = "", CYCLE = "c", COMPLETE = "k";
 
     public DrawGraph(String args) {
         commands = args.split(" ");
@@ -29,7 +30,7 @@ public class DrawGraph implements Command {
         switch (commands[GRAPH_NAME]) {
             case CYCLE: new Cycle(graphInput).draw(); // take in a number
                 break;
-            case COMPLETE:
+            case COMPLETE: new KComplete(graphInput).draw();
                 break;
             case EMPTY:
             default:

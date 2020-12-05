@@ -27,20 +27,16 @@ public class AddEdge implements Command {
         if(args.length > 2) { // !edge n1 n2
             parentOrder = TryParse.tryParseInt(args[1]);
             childOrder = TryParse.tryParseInt(args[2]);
-            System.out.println("2 edges");
         }
         else { // no input so create nodes
             createNodes();
-            System.out.println("less than 2 edges");
             return;
         }
         if(args.length > 3) { // !edge n1 n2 value
             value = TryParse.tryParseInt(args[3]);
-            System.out.println("3 edges");
         }
         if(args.length > 4) {  // !edge n1 n2 value U/D // these nodes are the order of the nodes
             type = args[4];
-            System.out.println("4 edges");
         }
         // if we reach this, we know that we have all the values we needed.
         handleAddEdgeCommand(parentOrder, childOrder, value, type);
@@ -60,8 +56,6 @@ public class AddEdge implements Command {
             Edge.EdgeTypes type = typeStr.equals("D") ? Edge.EdgeTypes.DIRECTED : Edge.EdgeTypes.UNDIRECTED;
             createEdge(parent, child, value, type);
         }
-
-        System.out.println("handled add edge");
     }
 
     private void createLoop() {

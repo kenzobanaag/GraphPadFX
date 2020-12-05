@@ -114,7 +114,7 @@ public abstract class CircleTranslator {
         for(int i = 0; i < nodeCount; i++) {
             nodes.add(new Point2D(centerX + radius * Math.cos(Math.toRadians(currentDegree)),
                     centerY + radius * Math.sin(Math.toRadians(currentDegree))));
-            currentDegree -= nodeDistance;
+            currentDegree += nodeDistance;
         }
         return nodes;
     }
