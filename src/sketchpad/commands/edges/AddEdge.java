@@ -73,8 +73,6 @@ public class AddEdge implements Command {
         Node child = nodeMap.get(nodeMap.size() - 1); // last
 
         createEdge(parent, child, 0, Edge.EdgeTypes.UNDIRECTED);
-
-        System.out.println("created edge");
     }
 
     public AddEdge(Node parent, Node child, int value, Edge.EdgeTypes type) {
