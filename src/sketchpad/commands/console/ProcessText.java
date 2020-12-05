@@ -5,6 +5,7 @@ import sketchpad.commands.algorithms.ProcessAlgorithm;
 import sketchpad.commands.edges.AddEdge;
 import sketchpad.commands.edges.RemoveAllEdges;
 import sketchpad.commands.graph.ClearSketchPad;
+import sketchpad.commands.graph.DrawGraph;
 import sketchpad.commands.nodes.AddNode;
 import sketchpad.commands.nodes.DeleteNodeByOrder;
 import sketchpad.commands.nodes.SearchNode;
@@ -15,10 +16,10 @@ public class ProcessText implements Command {
     private String command = "";
     public static final String PREFIX = "!", HELP = "?";
     private static final String RESET_SKETCHPAD = "reset", CLEAR_SCREEN = "cls", COMMANDS = "cmd",
-            ADD_NODE = "node", REMOVE_NODE = "rm", SEARCH_NODE = "search", COUNT = "count", ADD_EDGE="edge",
-            ALGORITHM = "algorithm", EDGE="edge";
+            ADD_NODE = "node", REMOVE_NODE = "rm", SEARCH_NODE = "search", XMAS = "xmas", ADD_EDGE="edge",
+            ALGORITHM = "algorithm", DRAW = "draw";
     private static final String[] COMMAND_LIST = {RESET_SKETCHPAD, CLEAR_SCREEN, ADD_NODE, REMOVE_NODE, SEARCH_NODE,
-            COUNT, ALGORITHM};
+            XMAS, ALGORITHM, DRAW};
 
     public ProcessText(String[] lines) {
         if(lines.length > 0)
@@ -37,7 +38,7 @@ public class ProcessText implements Command {
             case PREFIX+COMMANDS:
                 new ConsoleCommands(COMMAND_LIST).execute();
                 break;
-            case PREFIX+COUNT:
+            case PREFIX+XMAS:
                 new Count().execute();
                 break;
             default:
@@ -64,6 +65,9 @@ public class ProcessText implements Command {
                 }
                 else if(command.contains(PREFIX+RESET_SKETCHPAD)) {
                     new RemoveAllEdges(command).execute();
+                }
+                else if(command.contains(PREFIX+DRAW)) {
+                    new DrawGraph(command).execute();
                 }
                 else
                     ConsoleController.consoleWrite("Command not recognized");

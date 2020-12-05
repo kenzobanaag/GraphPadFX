@@ -9,7 +9,7 @@ public class RemoveAllEdges implements Command {
 
     public RemoveAllEdges(String command) {
         String[] cmd = command.split(" ");
-        if(cmd[1] != null && cmd[1].equals("edge")) {
+        if(cmd.length > 1 && cmd[1].equals("edge")) {
             executable = true;
         }
     }

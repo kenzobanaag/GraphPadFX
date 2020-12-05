@@ -26,6 +26,9 @@ public class AddNode implements Command {
             node = new Vertex(x,y);
         }
         else node = new Vertex(Sizes.Node.RADIUS + PADDING,Sizes.Node.RADIUS + PADDING);
+        if(args.length > 3) {
+            node.setValue(TryParse.tryParseInt(args[3]));
+        }
     }
 
 

@@ -1,17 +1,8 @@
 package sketchpad.model.algorithms.graph;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.util.Duration;
-import sketchpad.constants.ColorScheme;
 import sketchpad.controller.ConsoleController;
 import sketchpad.model.algorithms.Algorithm;
-import sketchpad.model.canvaselement.Element;
 import sketchpad.model.canvaselement.vertex.Node;
-
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -61,5 +52,4 @@ public class Components extends Algorithm {
     public int getComponentCount() {
         return componentCount;
     }
-
 }

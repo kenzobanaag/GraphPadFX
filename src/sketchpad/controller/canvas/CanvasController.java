@@ -14,7 +14,6 @@ import sketchpad.model.canvaselement.edge.EdgeBuilder;
 import sketchpad.model.collision.Collision;
 import sketchpad.model.canvaselement.edge.Edge;
 import sketchpad.model.canvaselement.vertex.Node;
-import sketchpad.view.BottomDisplay;
 import sketchpad.view.Canvas;
 
 import java.util.HashMap;
@@ -127,7 +126,6 @@ public class CanvasController {
                 Node parent = (Node)elementSelection[CURRENT];
                 Edge newEdge = EdgeBuilder.buildEdge(parent, child); // edge builder
                 addEdge(newEdge);
-                deselect(elementSelection[CURRENT]); // fixme: why do we want to deselect this?
             }
         }
     }
@@ -138,7 +136,7 @@ public class CanvasController {
         repaintNodes();
         BottomDisplayController.setEdges(data.getEdgeCount());
         focus();
-        //deselect(elementSelection[CURRENT]); // fixme: why do we want to deselect this?
+        deselect(elementSelection[CURRENT]);
         toggleName();
     }
 
@@ -154,18 +152,6 @@ public class CanvasController {
             canvas.getLayout().getChildren().remove(node.getCanvasElement());
         for(Node node :data.getNodeMap().values())
             canvas.getLayout().getChildren().add(node.getCanvasElement());
-    }
-
-    // fixme: use the other addEdge..
-    public static void addEdge(String nodeId, Edge edge) {
-        if(findNode(nodeId) != null) { // catch if invalid node
-           // CanvasData.addEdge(nodeId, edge); // add to data
-            // do some other stuff
-            canvas.getLayout().getChildren().add(edge.getCanvasElement()); // draw it on canvas
-            BottomDisplayController.setEdges(data.getEdgeCount());
-            toggleName();
-            focus();
-        }
     }
 
     public static void removeEdge(Edge edge) {
@@ -296,6 +282,7 @@ public class CanvasController {
         }
     }
 
+    // note: watch out for this
     private static void deselectAll() {
         for(Node node : data.getNodeMap().values())
             node.deselect();

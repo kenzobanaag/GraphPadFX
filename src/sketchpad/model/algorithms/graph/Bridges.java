@@ -8,7 +8,7 @@ import sketchpad.model.canvaselement.edge.Edge;
 import sketchpad.utils.DeepClone;
 
 /*
- * note: Current implementation prints out everything.
+ * refactor: Refactor this implementation to something that doesnt rely on the component algorithm maybe?
  * */
 public class Bridges extends Algorithm {
 

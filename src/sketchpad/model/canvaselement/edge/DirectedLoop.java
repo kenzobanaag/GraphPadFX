@@ -20,13 +20,13 @@ public class DirectedLoop extends Edge{
     private Arc loop;
     private final int RADIUS = Sizes.Node.RADIUS;
 
-    protected DirectedLoop(Node parent, Node child) {
+    public DirectedLoop(Node parent, Node child) {
         super(parent, child);
         initArc(parent.getCanvasElement().getLayoutX() + RADIUS, parent.getCanvasElement().getLayoutY() + RADIUS);
         initListeners();
     }
 
-    protected DirectedLoop(Node parent, Node child, int value) {
+    public DirectedLoop(Node parent, Node child, int value) {
         super(parent, child, value);
         initArc(parent.getCanvasElement().getLayoutX() + RADIUS, parent.getCanvasElement().getLayoutY() + RADIUS); // 25 is the node raidius
         initListeners();
