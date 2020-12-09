@@ -61,7 +61,7 @@ public abstract class CircleTranslator {
                                                  double degree, double direction) {
         double x;
         double y;
-        if(direction > 0) { // positive
+        if(direction >= 0) { // positive
             x = centerX + radius * Math.cos(getAngle(slope) + Math.toRadians(degree));
             y = centerY + radius * Math.sin(getAngle(slope) + Math.toRadians(degree));
         }
@@ -77,7 +77,7 @@ public abstract class CircleTranslator {
                                                  double degree, double direction) {
         double x;
         double y;
-        if(direction > 0) { // positive
+        if(direction >= 0) { // positive
             x = centerX + radius * Math.cos(getAngle(slope) - Math.toRadians(degree));
             y = centerY + radius * Math.sin(getAngle(slope) - Math.toRadians(degree));
         }
@@ -96,8 +96,8 @@ public abstract class CircleTranslator {
     public static double getSlope(double startX, double startY, double endX, double endY) {
         double rise = (endY - startY);
         double run = (endX - startX);
-        if(rise == 0 || run == 0)
-            return 0;
+        if(run == 0)
+            return rise;
         return  rise / run ;
     }
 
