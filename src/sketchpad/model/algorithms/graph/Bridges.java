@@ -1,23 +1,29 @@
 package sketchpad.model.algorithms.graph;
 
+import sketchpad.constants.ColorScheme;
 import sketchpad.controller.ConsoleController;
 import sketchpad.controller.canvas.CanvasController;
 import sketchpad.model.algorithms.Algorithm;
+import sketchpad.model.algorithms.graph.componentinfo.StronglyConnectedComponents;
 import sketchpad.model.canvaselement.Element;
 import sketchpad.model.canvaselement.edge.Edge;
+import sketchpad.model.canvaselement.vertex.Node;
 import sketchpad.utils.DeepClone;
 
 /*
- * refactor: Refactor this implementation to something that doesnt rely on the component algorithm maybe?
+ * note: Bridges in directed graphs are the edges that when removed, increases or decreases the size of strongly
+ *       connected components
+ *
+ * note: Bridges in undirected graphs are edges that change the total component size when removed.
  * */
 public class Bridges extends Algorithm {
 
-    private Components comp;
+    private StronglyConnectedComponents comp;
     private int originalCount;
 
     @Override
     public void setup() {
-        comp = new Components();
+        comp = new StronglyConnectedComponents();
         performComponentAlgorithm();
         originalCount = comp.getComponentCount();
     }
@@ -25,7 +31,14 @@ public class Bridges extends Algorithm {
     @Override
     public void execute() {
         startAlgorithm();
+        deColorAllNodes();
         ConsoleController.consoleWrite("Bridges are highlighted");
+    }
+
+    private void deColorAllNodes() {
+        for(Node node : nodeMap.values()) {
+            node.highlight(ColorScheme.Node.NODE);
+        }
     }
 
     private void startAlgorithm() {

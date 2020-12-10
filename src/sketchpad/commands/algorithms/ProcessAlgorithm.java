@@ -4,13 +4,14 @@ import sketchpad.commands.Command;
 import sketchpad.controller.ConsoleController;
 import sketchpad.controller.canvas.CanvasController;
 import sketchpad.model.algorithms.graph.Bridges;
-import sketchpad.model.algorithms.graph.Components;
+import sketchpad.model.algorithms.graph.componentinfo.Components;
+import sketchpad.model.algorithms.graph.componentinfo.StronglyConnectedComponents;
 
 public class ProcessAlgorithm implements Command {
 
     private final int ALGORITHM_NAME = 1;
     private String[] commands;
-    private final String COMPONENT = "component", EMPTY = "", BRIDGE = "bridge";
+    private final String COMPONENT = "component", EMPTY = "", BRIDGE = "bridge", SCC = "scc";
 
     public ProcessAlgorithm(String args) {
         commands = args.split(" ");
@@ -28,6 +29,8 @@ public class ProcessAlgorithm implements Command {
             break;
             case BRIDGE: CanvasController.performAlgorithm(new Bridges());
                 break;
+            case SCC: CanvasController.performAlgorithm(new StronglyConnectedComponents());
+            break;
             case EMPTY:
             default:
                 ConsoleController.consoleWrite("Please specify an algorithm or type ?algorithm for help");

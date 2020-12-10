@@ -1,4 +1,4 @@
-package sketchpad.model.algorithms.graph;
+package sketchpad.model.algorithms.graph.componentinfo;
 
 import sketchpad.controller.ConsoleController;
 import sketchpad.model.algorithms.Algorithm;
