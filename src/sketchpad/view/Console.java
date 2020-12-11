@@ -22,8 +22,6 @@ import static sketchpad.constants.Strings.Console.TITLE;
 public class Console extends LayoutContainer {
 
     private final String CONSOLE_STYLE = String.format("-fx-background-color: %s;", ColorScheme.Console.BACKGROUND_STR);
-    private final String TITLE_BAR_STYLE = String.format("-fx-background-color: %s;", Canvas.BACKGROUND_STR);
-    private final String TEXT_AREA_STYLE = String.format("text-area-background: %s;", Canvas.BACKGROUND_STR);
     private BorderPane layout;
 
 
@@ -41,7 +39,7 @@ public class Console extends LayoutContainer {
         titleBar.setRight(minimizeButton);
 
         TextArea textArea = new TextArea();
-        textArea.setStyle("text-area-background: green;");
+        textArea.setStyle(String.format("-fx-font-size: %d;", Sizes.Console.TEXT_SIZE));
         textArea.setWrapText(true);
         layout.setCenter(textArea);
         layout.setTop(titleBar);
