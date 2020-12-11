@@ -24,7 +24,7 @@ public class GreedyChromatic extends Algorithm {
     @Override
     public void setup() {
         maxColors = 0;
-        lastSolutionColors = Integer.MAX_VALUE;
+        lastSolutionColors = nodeMap.size() > 0 ? Integer.MAX_VALUE : -1;
         nodeColors = lastSolution = new int[nodeMap.size()];
         available = new boolean[nodeMap.size()];
         colors = new Color[] {GREEN_NODE, GOLD_NODE, INVERTED_NODE, BLACK_NODE, ORANGE_NODE, BLUE_NODE, PURPLE_NODE,
@@ -38,7 +38,7 @@ public class GreedyChromatic extends Algorithm {
         ConsoleController.consoleWrite("Minimum colors: " + (lastSolutionColors+1));
     }
 
-    private void startAlgorithm() {
+    public void startAlgorithm() {
         for(int i = 0; i < nodeMap.size(); i++) { // brute force: we want to do this to assure that were getting the min colors.
             Arrays.fill(nodeColors, UNASSIGNED);
             Arrays.fill(available, true);
@@ -77,6 +77,10 @@ public class GreedyChromatic extends Algorithm {
             if(getNVal(j) != null)
                 getNVal(j).highlight(colors[lastSolution[j] % colors.length]);
         }
+    }
+
+    public int getMinColors() {
+        return lastSolutionColors + 1; // + 1 because we start at 0;
     }
 
     // get node at n. Since this is a linkedHashMap, we can assure that the order doesnt change
