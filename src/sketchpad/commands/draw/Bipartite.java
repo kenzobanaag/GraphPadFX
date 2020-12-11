@@ -39,8 +39,7 @@ public class Bipartite implements IDrawable{
     }
 
     private void buildNodes(){
-        // maybe create
-        // y, height would be constant
+        // refactor: we could extract this to some other method but lets move to other stuff for now
         double height_m = (double)Sizes.Canvas.HEIGHT / 2 - (double)Sizes.Canvas.HEIGHT / 4;
         double height_n = (double)Sizes.Canvas.HEIGHT / 2 + (double)Sizes.Canvas.HEIGHT / 4;
 
