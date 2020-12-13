@@ -21,8 +21,8 @@ public class AddNode implements Command {
     public AddNode(String cmd) {
         String[] args = cmd.split(" ");
         if(args.length > 2) {
-            double x = InputValidator.validateAdd(TryParse.tryParse(args[1]));
-            double y = InputValidator.validateAdd(TryParse.tryParse(args[2]));
+            double x = InputValidator.validateX(TryParse.tryParse(args[1]));
+            double y = InputValidator.validateY(TryParse.tryParse(args[2]));
             node = new Vertex(x,y);
         }
         else node = new Vertex(Sizes.Node.RADIUS + PADDING,Sizes.Node.RADIUS + PADDING);
