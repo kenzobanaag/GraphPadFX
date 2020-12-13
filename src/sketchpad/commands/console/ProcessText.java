@@ -24,13 +24,15 @@ public class ProcessText implements Command {
             REMOVE_NODE, SEARCH_NODE, XMAS, ALGORITHM, DRAW, HELP};
 
     public ProcessText(String[] lines) {
-        if(lines.length > 0)
+        if(lines.length > 0) {
             command = lines[lines.length - 1]; // get last line from text area
+            command = command.toLowerCase().trim();
+        }
     }
 
     @Override
     public void execute() {
-        switch (command.toLowerCase().trim()) {
+        switch (command) {
             case PREFIX+RESET_SKETCHPAD :
                 new ClearSketchPad().execute();
                 break;

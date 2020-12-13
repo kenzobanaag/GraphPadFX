@@ -37,6 +37,7 @@ public class ProcessHelp implements Command {
     private final String DRAW_KMN = "<!draw kmn m n> - Draw a kmn graph with m n nodes";
     private final String DRAW_CYCLE = "<!draw c n> - Draw a a cycle graph with n nodes";
     private final String DRAW_K = "<!draw k n> - Draw a complete graph with n nodes";
+    private final String DRAW_PETERSEN = "<!draw petersen> - Draw a petersen graph";
 
 
     public ProcessHelp(String args) {
@@ -109,7 +110,8 @@ public class ProcessHelp implements Command {
     private void printDraw() {
         String sb = "\n" + DRAW_KMN + "\n\n" +
                 DRAW_CYCLE + "\n\n" +
-                DRAW_K + "\n\n";
+                DRAW_K + "\n\n" +
+                DRAW_PETERSEN + "\n\n";
         ConsoleController.consoleWrite(sb);
     }
 }

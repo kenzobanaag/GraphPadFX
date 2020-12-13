@@ -65,9 +65,9 @@ public class Petersen implements IDrawable{
 
     private void connectInnerStar() {
         for(int i = 0; i < NODE_COUNT; i++) {
-            new AddEdge(String.format("!edge %d %d", i, i+NODE_COUNT)).execute();
+            new AddEdge(String.format("!edge %d %d", i, i+NODE_COUNT)).execute(); // connect inner nodes to outer nodes
         }
-
+        // connect to make a star
         new AddEdge(String.format("!edge %d %d", 5, 8)).execute();
         new AddEdge(String.format("!edge %d %d", 9, 6)).execute();
         new AddEdge(String.format("!edge %d %d", 5, 7)).execute();
