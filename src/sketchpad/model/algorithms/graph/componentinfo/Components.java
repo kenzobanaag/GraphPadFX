@@ -1,9 +1,8 @@
-package sketchpad.model.algorithms.graph;
+package sketchpad.model.algorithms.graph.componentinfo;
 
 import sketchpad.controller.ConsoleController;
 import sketchpad.model.algorithms.Algorithm;
 import sketchpad.model.canvaselement.vertex.Node;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -28,13 +27,17 @@ public class Components extends Algorithm {
 
     @Override
     public void execute() {
+        startAlgorithm();
+        ConsoleController.consoleWrite("Number Of Components: " + componentCount);
+    }
+
+    public void startAlgorithm() {
         for(String nodeId : visitedMap.keySet()) {
             if(!visitedMap.get(nodeId)) {
                 performDFS(nodeMap.get(nodeId));
                 ++componentCount;
             }
         }
-        ConsoleController.consoleWrite("Number Of Components: " + componentCount);
     }
 
     private void performDFS(Node node) {
@@ -44,5 +47,9 @@ public class Components extends Algorithm {
                 performDFS(nodeMap.get(adjacentNode));
             }
         }
+    }
+
+    public int getComponentCount() {
+        return componentCount;
     }
 }

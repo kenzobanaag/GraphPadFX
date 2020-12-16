@@ -1,5 +1,7 @@
 package sketchpad.model.canvaselement.edge;
 
+import sketchpad.utils.DeepClone;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class Edges {
     private String parentNode;
     private int degree; // degrees still belong to the node
     private boolean isAllUndirected;
+    private int dLoops; // fixme: temp solution
 
     public Edges(String nodeId) {
         parentNode = nodeId;
@@ -33,6 +36,7 @@ public class Edges {
         inDegree = 0;
         outDegree = 0;
         degree = 0;
+        dLoops = 0;
         isAllUndirected = true;
     }
 
@@ -56,12 +60,7 @@ public class Edges {
     }
 
     public List<String> edgeListClone() {
-        LinkedList<String> deepCloneArray = new LinkedList<>();
-        for(String edgeId : edgeList)
-            if(!deepCloneArray.contains(edgeId))
-                deepCloneArray.add(edgeId);
-
-        return deepCloneArray;
+        return DeepClone.createNoDuplicate(edgeList);
     }
 
     public boolean isUndirected() {
@@ -92,11 +91,24 @@ public class Edges {
                 handleAddUndirected(edge); // fixme: doesnt really mean that this node is always the child
                 ++outDegree;
                 ++inDegree;
+                break;
+            case UNDIRECTED_LOOP:
+//                ++outDegree;
+//                ++inDegree;
+//                break;
+            case DIRECTED_LOOP:
+                ++outDegree;
+                ++inDegree;
+                ++dLoops;
         }
         ++degree;
         edgeList.add(edge.getId());  // refactor: see if we could remove this
         // we want to know if there are parallel edges.
         handleParallelEdgesAdd(edge);
+    }
+
+    public int getdLoops() {
+        return dLoops;
     }
 
     private void handleDelete(Edge edge) {
@@ -109,6 +121,15 @@ public class Edges {
                 --outDegree;
                 --inDegree;
                 handleRemoveUndirected(edge); // question is, is it always the child id that is added.
+                break;
+            case UNDIRECTED_LOOP: // note: treat undirected loops the same as directed loops
+//                --outDegree;
+//                --inDegree;
+//                break;
+            case DIRECTED_LOOP:
+                --outDegree;
+                --inDegree;
+                --dLoops;
         }
         --degree;
         edgeList.remove(edge.getId());  // refactor: see if we could remove this

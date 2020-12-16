@@ -26,8 +26,9 @@ public final class Sizes {
     }
 
     public static final class Console {
-        public static final int WIDTH = 200;
+        public static final int WIDTH = 250;
         public static final int HEIGHT = Canvas.HEIGHT;
+        public static final int TEXT_SIZE = 13;
     }
 
     public static final class Display {

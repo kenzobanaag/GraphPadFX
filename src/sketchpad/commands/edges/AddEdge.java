@@ -3,19 +3,21 @@ package sketchpad.commands.edges;
 import sketchpad.commands.Command;
 import sketchpad.commands.nodes.AddNode;
 import sketchpad.controller.canvas.CanvasController;
-import sketchpad.model.canvaselement.edge.Directed;
-import sketchpad.model.canvaselement.edge.Edge;
-import sketchpad.model.canvaselement.edge.Undirected;
+import sketchpad.model.canvaselement.edge.*;
 import sketchpad.model.canvaselement.vertex.Node;
 import sketchpad.utils.TryParse;
 
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+* TODO: Handle loops
+* */
 public class AddEdge implements Command {
 
     private Edge edge;
     private String parentId;
+    private final String DIRECTED = "d";
 
     public AddEdge(String cmd) {
         String[] args = cmd.split(" ");
@@ -26,20 +28,16 @@ public class AddEdge implements Command {
         if(args.length > 2) { // !edge n1 n2
             parentOrder = TryParse.tryParseInt(args[1]);
             childOrder = TryParse.tryParseInt(args[2]);
-            System.out.println("2 edges");
         }
         else { // no input so create nodes
             createNodes();
-            System.out.println("less than 2 edges");
             return;
         }
         if(args.length > 3) { // !edge n1 n2 value
             value = TryParse.tryParseInt(args[3]);
-            System.out.println("3 edges");
         }
         if(args.length > 4) {  // !edge n1 n2 value U/D // these nodes are the order of the nodes
             type = args[4];
-            System.out.println("4 edges");
         }
         // if we reach this, we know that we have all the values we needed.
         handleAddEdgeCommand(parentOrder, childOrder, value, type);
@@ -52,16 +50,33 @@ public class AddEdge implements Command {
         if(parentOrder == -1 || childOrder == -1 || parent == null || child == null) { // invalid input
             createNodes();
         }
+        else if(parentOrder == childOrder) {
+            createLoop(parentOrder, typeStr);
+        }
         else { // valid
-            Edge.EdgeTypes type = typeStr.equals("U") ? Edge.EdgeTypes.UNDIRECTED : Edge.EdgeTypes.DIRECTED;
+            Edge.EdgeTypes type = typeStr.equals(DIRECTED) ? Edge.EdgeTypes.DIRECTED : Edge.EdgeTypes.UNDIRECTED;
             createEdge(parent, child, value, type);
         }
+    }
 
-        System.out.println("handled add edge");
+    private void createLoop(int parentOrder, String typeStr) {
+        Edge.EdgeTypes type = typeStr.equals(DIRECTED) ? Edge.EdgeTypes.DIRECTED_LOOP : Edge.EdgeTypes.UNDIRECTED_LOOP;
+        List<Node> nodeMap = new LinkedList<>(CanvasController.getNodeMap().values());
+        Node parent = null;
+        for(Node node : nodeMap) {
+            if(node.getOrder() == parentOrder) {
+                parent = node;
+                break;
+            }
+        }
+        if(parent == null)
+            parent = nodeMap.get(nodeMap.size() - 1);
+        if(parent != null)
+            createEdge(parent, parent, 0, type);
     }
 
     private void createNodes() {
-        new AddNode(50,50).execute();
+        new AddNode(50,50).execute(); // create nodes that are next to each other
         new AddNode(175,50).execute();
 
         List<Node> nodeMap = new LinkedList<>(CanvasController.getNodeMap().values());
@@ -69,8 +84,6 @@ public class AddEdge implements Command {
         Node child = nodeMap.get(nodeMap.size() - 1); // last
 
         createEdge(parent, child, 0, Edge.EdgeTypes.UNDIRECTED);
-
-        System.out.println("created edge");
     }
 
     public AddEdge(Node parent, Node child, int value, Edge.EdgeTypes type) {
@@ -97,14 +110,21 @@ public class AddEdge implements Command {
         }
 
         switch (type) {
-            case DIRECTED: edge = new Directed(parent, child);
+            case DIRECTED: edge = new Directed(parent, child, value);
                 break;
-            case UNDIRECTED: edge = new Undirected(parent, child);
+            case UNDIRECTED: edge = new Undirected(parent, child, value);
+            break;
+            case UNDIRECTED_LOOP: edge = new UndirectedLoop(parent, child, value);
+            break;
+            case DIRECTED_LOOP: edge = new DirectedLoop(parent, child,value);
         }
     }
 
+    /*
+    * fixme: theres no point in doing this since we already created the edge. We just need to pass it in.
+    * */
     @Override
     public void execute() {
-        CanvasController.addEdge(parentId, edge);
+        CanvasController.addEdge(edge);
     }
 }

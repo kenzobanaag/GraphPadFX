@@ -83,6 +83,8 @@ public class Directed extends Edge{
     @Override
     public void highlight(Paint paintStyle) {
         edge.setStroke(paintStyle);
+        arrow.setStroke(paintStyle);
+        arrow.setFill(paintStyle);
     }
 
     public void select() {

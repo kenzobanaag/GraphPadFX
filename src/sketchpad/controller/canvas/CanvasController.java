@@ -14,9 +14,9 @@ import sketchpad.model.canvaselement.edge.EdgeBuilder;
 import sketchpad.model.collision.Collision;
 import sketchpad.model.canvaselement.edge.Edge;
 import sketchpad.model.canvaselement.vertex.Node;
-import sketchpad.view.BottomDisplay;
 import sketchpad.view.Canvas;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import static sketchpad.constants.Sizes.Canvas.SELECTION_COUNT;
@@ -65,6 +65,8 @@ public class CanvasController {
             else if(event.getButton().equals(MouseButton.SECONDARY)) {  // right click
                 if(isCanvasClear(x,y)) {// check if on top of node
                     deselect(elementSelection[CURRENT]);
+                    // deselects all items
+                    deselectAll();
                     event.consume();
                     focus();
                 }
@@ -84,8 +86,12 @@ public class CanvasController {
                   // if display is showing
                   case VALUE: labelType = DisplayTypes.DEGREE;
                       break;
-                  case DEGREE: labelType = DisplayTypes.NAME;
+                  case DEGREE: labelType = DisplayTypes.DEGREE_IN;
                       break;
+                  case DEGREE_IN: labelType = DisplayTypes.DEGREE_OUT;
+                    break;
+                  case DEGREE_OUT: labelType = DisplayTypes.NAME;
+                    break;
               }
               toggleName();
               toggleShownLabel();
@@ -123,15 +129,19 @@ public class CanvasController {
             if(child != null) { // both source and target are valid
                 Node parent = (Node)elementSelection[CURRENT];
                 Edge newEdge = EdgeBuilder.buildEdge(parent, child); // edge builder
-                data.addEdge(newEdge);
-                canvas.getLayout().getChildren().add(newEdge.getCanvasElement());
-                repaintNodes();
-                BottomDisplayController.setEdges(data.getEdgeCount());
-                focus();
-                deselect(elementSelection[CURRENT]); // fixme: why do we want to deselect this?
-                toggleName();
+                addEdge(newEdge);
             }
         }
+    }
+
+    public static void addEdge(Edge edge) {
+        data.addEdge(edge);
+        canvas.getLayout().getChildren().add(edge.getCanvasElement());
+        repaintNodes();
+        BottomDisplayController.setEdges(data.getEdgeCount());
+        focus();
+        deselect(elementSelection[CURRENT]);
+        toggleName();
     }
 
     /*
@@ -146,18 +156,6 @@ public class CanvasController {
             canvas.getLayout().getChildren().remove(node.getCanvasElement());
         for(Node node :data.getNodeMap().values())
             canvas.getLayout().getChildren().add(node.getCanvasElement());
-    }
-
-    // fixme: use the other addEdge..
-    public static void addEdge(String nodeId, Edge edge) {
-        if(findNode(nodeId) != null) { // catch if invalid node
-           // CanvasData.addEdge(nodeId, edge); // add to data
-            // do some other stuff
-            canvas.getLayout().getChildren().add(edge.getCanvasElement()); // draw it on canvas
-            BottomDisplayController.setEdges(data.getEdgeCount());
-            toggleName();
-            focus();
-        }
     }
 
     public static void removeEdge(Edge edge) {
@@ -239,6 +237,10 @@ public class CanvasController {
         return data.getNodeMap();
     }
 
+    public static HashMap<String, Edge> getEdgeMap() {
+        return data.getEdgeMap();
+    }
+
     public static void adjustEdges(Node node) {
         data.adjustEdge(node);
     }
@@ -264,6 +266,24 @@ public class CanvasController {
             BottomDisplayController.showSelection(element.getName(), element.getValue()); // show the bottom display tings
             element.getCanvasElement().requestFocus();
         }
+
+        // todo remove this:
+//        if(element instanceof Node) {
+//            System.out.println("Node Order: " + element.getId());
+//            System.out.println("Degree In: " + ((Node)element).getEdges().getInDegree());
+//            System.out.println("Degree Out: " + ((Node)element).getEdges().getOutDegree());
+//        }
+    }
+
+    public static void removeAllEdges() {
+        HashMap<String, Edge> deepCloneEdgeMap = new HashMap<>();
+        for(Edge edge : data.getEdgeMap().values()) {
+            deepCloneEdgeMap.put(edge.getId(), edge);
+        }
+
+        for(Edge edge : deepCloneEdgeMap.values()) {
+            removeEdge(edge);
+        }
     }
 
     private static void deselect(Element element) {
@@ -271,6 +291,14 @@ public class CanvasController {
             element.deselect();
             BottomDisplayController.hideSelection();
         }
+    }
+
+    // note: watch out for this
+    private static void deselectAll() {
+        for(Node node : data.getNodeMap().values())
+            node.deselect();
+        for(Edge edge : data.getEdgeMap().values())
+            edge.deselect();
     }
 
     private static void changeSelection(Element element) {

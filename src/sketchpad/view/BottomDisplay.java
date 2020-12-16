@@ -119,6 +119,10 @@ public class BottomDisplay extends LayoutContainer{
                 break;
             case DEGREE: labelStr = "Label: Degree";
                 break;
+            case DEGREE_IN: labelStr = "Label: In Degree";
+                break;
+            case DEGREE_OUT: labelStr = "Label: Out Degree";
+                break;
         }
         shownLabel.setText(labelStr);
         shownLabel.setVisible(true);

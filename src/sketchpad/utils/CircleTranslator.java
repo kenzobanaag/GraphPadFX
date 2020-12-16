@@ -17,6 +17,7 @@ public abstract class CircleTranslator {
 
     // direction = positive or negative, positive is from left to right, and negative is right to left.
     private static List<Point2D> pointList;
+    private static double FULL_CIRCLE = 360;
 
     public static List<Point2D> computePoints(double centerX, double centerY, double slope, int radius, int numPoints,
                                               double degree, double direction) {
@@ -60,7 +61,7 @@ public abstract class CircleTranslator {
                                                  double degree, double direction) {
         double x;
         double y;
-        if(direction > 0) { // positive
+        if(direction >= 0) { // positive
             x = centerX + radius * Math.cos(getAngle(slope) + Math.toRadians(degree));
             y = centerY + radius * Math.sin(getAngle(slope) + Math.toRadians(degree));
         }
@@ -76,7 +77,7 @@ public abstract class CircleTranslator {
                                                  double degree, double direction) {
         double x;
         double y;
-        if(direction > 0) { // positive
+        if(direction >= 0) { // positive
             x = centerX + radius * Math.cos(getAngle(slope) - Math.toRadians(degree));
             y = centerY + radius * Math.sin(getAngle(slope) - Math.toRadians(degree));
         }
@@ -95,8 +96,26 @@ public abstract class CircleTranslator {
     public static double getSlope(double startX, double startY, double endX, double endY) {
         double rise = (endY - startY);
         double run = (endX - startX);
-        if(rise == 0 || run == 0)
-            return 0;
+        if(run == 0)
+            return rise;
         return  rise / run ;
+    }
+
+    /*
+    * returns a list of points that follow a circle path. Helps with balanced node distancing in a shape of a circle.
+    * */
+    public static List<Point2D> getNodesInACircle(double centerX, double centerY, double radius, int nodeCount,
+                                                  double startDegree) {
+        List<Point2D> nodes = new LinkedList<>();
+
+        double currentDegree = startDegree;
+        double nodeDistance = FULL_CIRCLE / nodeCount;
+
+        for(int i = 0; i < nodeCount; i++) {
+            nodes.add(new Point2D(centerX + radius * Math.cos(Math.toRadians(currentDegree)),
+                    centerY + radius * Math.sin(Math.toRadians(currentDegree))));
+            currentDegree += nodeDistance;
+        }
+        return nodes;
     }
 }
