@@ -97,7 +97,10 @@ public abstract class Edge implements Element {
                 break;
             case VALUE: labelStr = value+"";
                 break;
-            case DEGREE: return;
+            case DEGREE:
+            case DEGREE_IN:
+            case DEGREE_OUT:
+                return;
         }
         edgeNameLabel.setText(labelStr);
     }

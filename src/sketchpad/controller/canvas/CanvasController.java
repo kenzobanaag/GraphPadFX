@@ -86,8 +86,12 @@ public class CanvasController {
                   // if display is showing
                   case VALUE: labelType = DisplayTypes.DEGREE;
                       break;
-                  case DEGREE: labelType = DisplayTypes.NAME;
+                  case DEGREE: labelType = DisplayTypes.DEGREE_IN;
                       break;
+                  case DEGREE_IN: labelType = DisplayTypes.DEGREE_OUT;
+                    break;
+                  case DEGREE_OUT: labelType = DisplayTypes.NAME;
+                    break;
               }
               toggleName();
               toggleShownLabel();
@@ -262,6 +266,13 @@ public class CanvasController {
             BottomDisplayController.showSelection(element.getName(), element.getValue()); // show the bottom display tings
             element.getCanvasElement().requestFocus();
         }
+
+        // todo remove this:
+//        if(element instanceof Node) {
+//            System.out.println("Node Order: " + element.getId());
+//            System.out.println("Degree In: " + ((Node)element).getEdges().getInDegree());
+//            System.out.println("Degree Out: " + ((Node)element).getEdges().getOutDegree());
+//        }
     }
 
     public static void removeAllEdges() {

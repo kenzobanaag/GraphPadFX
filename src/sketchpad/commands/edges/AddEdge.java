@@ -51,7 +51,7 @@ public class AddEdge implements Command {
             createNodes();
         }
         else if(parentOrder == childOrder) {
-            createLoop(typeStr);
+            createLoop(parentOrder, typeStr);
         }
         else { // valid
             Edge.EdgeTypes type = typeStr.equals(DIRECTED) ? Edge.EdgeTypes.DIRECTED : Edge.EdgeTypes.UNDIRECTED;
@@ -59,15 +59,24 @@ public class AddEdge implements Command {
         }
     }
 
-    private void createLoop(String typeStr) {
+    private void createLoop(int parentOrder, String typeStr) {
         Edge.EdgeTypes type = typeStr.equals(DIRECTED) ? Edge.EdgeTypes.DIRECTED_LOOP : Edge.EdgeTypes.UNDIRECTED_LOOP;
         List<Node> nodeMap = new LinkedList<>(CanvasController.getNodeMap().values());
-        Node parent = nodeMap.get(nodeMap.size() - 1);
-        createEdge(parent, parent, 0, type);
+        Node parent = null;
+        for(Node node : nodeMap) {
+            if(node.getOrder() == parentOrder) {
+                parent = node;
+                break;
+            }
+        }
+        if(parent == null)
+            parent = nodeMap.get(nodeMap.size() - 1);
+        if(parent != null)
+            createEdge(parent, parent, 0, type);
     }
 
     private void createNodes() {
-        new AddNode(50,50).execute();
+        new AddNode(50,50).execute(); // create nodes that are next to each other
         new AddNode(175,50).execute();
 
         List<Node> nodeMap = new LinkedList<>(CanvasController.getNodeMap().values());

@@ -1,10 +1,7 @@
 package sketchpad.commands.graph;
 
 import sketchpad.commands.Command;
-import sketchpad.commands.draw.Bipartite;
-import sketchpad.commands.draw.Cycle;
-import sketchpad.commands.draw.KComplete;
-import sketchpad.commands.draw.Petersen;
+import sketchpad.commands.draw.*;
 import sketchpad.controller.ConsoleController;
 import sketchpad.utils.TryParse;
 
@@ -14,7 +11,7 @@ public class DrawGraph implements Command {
     private int graphInput = 0;
     private int graphInput2 = 0;
     private String[] commands;
-    private final String EMPTY = "", CYCLE = "c", COMPLETE = "k", BIPARTITE = "kmn", PETERSEN = "petersen";
+    private final String EMPTY = "", CYCLE = "c", COMPLETE = "k", BIPARTITE = "kmn", PETERSEN = "petersen", BST = "bst";
 
     public DrawGraph(String args) {
         commands = args.split(" ");
@@ -42,6 +39,8 @@ public class DrawGraph implements Command {
                 break;
             case PETERSEN: new Petersen().draw();
                 break;
+            //case BST: new Tree(graphInput).draw();
+            //    break;
             case EMPTY:
             default:
                 ConsoleController.consoleWrite("Please specify a graph type");

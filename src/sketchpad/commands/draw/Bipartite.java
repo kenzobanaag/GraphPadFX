@@ -4,6 +4,7 @@ import com.sun.glass.ui.Size;
 import sketchpad.commands.edges.AddEdge;
 import sketchpad.commands.nodes.AddNode;
 import sketchpad.constants.Sizes;
+import sketchpad.controller.ConsoleController;
 import sketchpad.controller.canvas.CanvasController;
 
 /*
@@ -20,10 +21,12 @@ public class Bipartite implements IDrawable{
     public Bipartite(int m, int n) {
         if(m < MIN_MN || m > MAX_MN) {
             m = MIN_MN;
+            ConsoleController.consoleWrite("Max for m is currently set at " + MAX_MN);
         }
 
         if(n < MIN_MN || n > MAX_MN) {
             n = MIN_MN;
+            ConsoleController.consoleWrite("Max for n is currently set at " + MAX_MN);
         }
 
         this.m = m;
